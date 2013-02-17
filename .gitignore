@@ -1,6 +1,5 @@
-caches/
-backups/
-link/.ssh/authorized_keys
-link/.ssh/id_*
-link/.ssh/known_hosts
+.ssh/authorized_keys
+.ssh/id_*
+.ssh/keys/*
+.ssh/known_hosts
 *LOCAL*

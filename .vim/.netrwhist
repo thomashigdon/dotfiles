@@ -1,0 +1,10 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_1='/Users/thigdon/.oh-my-zsh/plugins'
+let g:netrw_dirhist_2='/Users/thigdon/.oh-my-zsh/plugins/osx'
+let g:netrw_dirhist_3='/Users/thigdon/.oh-my-zsh/plugins'
+let g:netrw_dirhist_4='/Users/thigdon/.oh-my-zsh/plugins/python'
+let g:netrw_dirhist_5='/Users/thigdon/.oh-my-zsh/plugins'
+let g:netrw_dirhist_6='/Users/thigdon/.oh-my-zsh/plugins/vi-mode'
+let g:netrw_dirhist_7='/Users/thigdon/.oh-my-zsh'
+let g:netrw_dirhist_8='/Users/thigdon/.oh-my-zsh/custom/example'
