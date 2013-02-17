@@ -248,10 +248,10 @@ nnoremap ; :
 
 au FocusLost * :wa
 
+"" set jj to be escape
 inoremap jj <ESC>
 
 let g:Powerline_symbols = 'fancy'
-"colorscheme darkblue
 
 map <leader>rp :VimuxPromptCommand<CR>
 map <leader>rl :VimuxRunLastCommand<CR>
