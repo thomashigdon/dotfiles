@@ -34,14 +34,7 @@ COMPLETION_WAITING_DOTS="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(git macports osx perl rsync ssh-agent vi-mode brew command-not-found cp dircycle)
 
-export EDITOR="vim"
-bindkey -v 
-
-# vi style incremental search
-bindkey '^R' history-incremental-search-backward
-bindkey '^S' history-incremental-search-forward
-bindkey '^P' history-search-backward
-bindkey '^N' history-search-forward
+source $HOME/.zshrc-custom
 
 source $ZSH/oh-my-zsh.sh
 

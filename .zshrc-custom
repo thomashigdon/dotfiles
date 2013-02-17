@@ -1,0 +1,20 @@
+export EDITOR="vim"
+
+# vi style incremental search
+bindkey '^R' history-incremental-search-backward
+bindkey '^S' history-incremental-search-forward
+bindkey '^P' history-search-backward
+bindkey '^N' history-search-forward
+
+function ns {
+  local cur_dir="$HOME/tmp/scratch/current"
+  local new_dir="$HOME/tmp/scratch/`date +'%s'`"
+
+  mv $cur_dir $new_dir
+  mkdir -p $cur_dir
+  cd ~/scratch
+  echo "New scratch dir ready"
+}
+
+# autojump
+[[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
