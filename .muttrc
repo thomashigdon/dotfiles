@@ -1,0 +1,54 @@
+set mbox_type=Maildir
+
+set folder="$HOME/Mail/Maildir/"
+set mask="!&\\[^.]"
+set mbox=$HOME/Mail/Maildir/
+set spoolfile="$HOME/Mail/Maildir/"
+mailboxes ! + `\
+for file in ~/Mail/Maildir/.*; do \
+  box=$(basename "$file"); \
+  if [ ! "$box" = '.' -a ! "$box" = '..' -a ! "$box" = '.customflags' \
+      -a ! "$box" = '.subscriptions' ]; then \
+   echo -n "\"+$box\" "; \
+  fi; \
+done`
+
+macro index c "<change-folder>?<toggle-mailboxes>" "open a different folder"
+macro pager c "<change-folder>?<toggle-mailboxes>" "open a different folder"
+
+unignore date
+set move=no
+set header_cache=~/.mutt-cache
+set message_cachedir=~/.mutt-cache-dir
+set record="+.Sent"
+set postponed="+.Drafts"
+set trash="=Trash"
+set imap_check_subscribed
+set mail_check=60
+set timeout=10
+set net_inc=5
+set implicit_autoview
+
+# split the window
+set pager_index_lines=5
+
+set sort=threads
+bind editor <delete> delete-char
+
+macro pager \cb <pipe-entry>'urlview'<enter> 'Follow links with urlview'
+
+set edit_headers
+set autoedit
+
+# sidebar
+bind index,pager J sidebar-next
+bind index,pager K sidebar-prev
+bind index,pager L sidebar-open
+macro index,pager B '<enter-command>toggle sidebar_visible<enter>'
+
+# aliases
+macro pager A |'~/bin/mail2muttalias.py ~/.mutt-aliases'\n
+
+macro index M "T.*\n;WN" "Mark all messages as read"
+
+source .mutt-colors-solarized/mutt-colors-solarized-dark-16.muttrc

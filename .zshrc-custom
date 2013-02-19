@@ -21,7 +21,8 @@ if [[ $OSTYPE =~ ^darwin ]]; then
   [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
 fi
 
-keychain $(for x in internal external deployed;
+keychain $(for x in internal external deployed github;
              do echo $HOME/.keys/*$x | awk '{print $NF}';
            done)
 
+export LANG=en_US.utf8
