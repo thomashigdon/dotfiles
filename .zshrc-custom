@@ -24,5 +24,6 @@ fi
 keychain $(for x in internal external deployed github;
              do echo $HOME/.keys/*$x | awk '{print $NF}';
            done)
+source $HOME/.keychain/$(hostname)-sh
 
 export LANG=en_US.utf8
