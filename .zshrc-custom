@@ -22,6 +22,6 @@ if [[ $OSTYPE =~ ^darwin ]]; then
 fi
 
 keychain $(for x in internal external deployed;
-             do echo .keys/*$x | awk '{print $NF}';
+             do echo $HOME/.keys/*$x | awk '{print $NF}';
            done)
 
