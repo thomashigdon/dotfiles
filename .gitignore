@@ -1,7 +1,7 @@
 .ssh/authorized_keys
+.ssh/known_hosts
 .ssh/id_*
 .ssh/keys/*
-.ssh/known_hosts
 .ssh/*internal*
 .ssh/*external*
 .ssh/*deployed*
