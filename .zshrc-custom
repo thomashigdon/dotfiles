@@ -12,6 +12,8 @@ function ns {
 
   mv $cur_dir $new_dir
   mkdir -p $cur_dir
+  rm ~/scratch
+  ln -s $cur_dir ~/scratch 
   cd ~/scratch
   echo "New scratch dir ready"
 }
@@ -27,3 +29,5 @@ keychain $(for x in internal external deployed github;
 source $HOME/.keychain/$(hostname)-sh
 
 export LANG=en_US.utf8
+
+setopt ignoreeof
