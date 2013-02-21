@@ -1,10 +1,10 @@
 export EDITOR="vim"
 
 # vi style incremental search
-bindkey '^R' history-incremental-search-backward
-bindkey '^S' history-incremental-search-forward
-bindkey '^P' history-search-backward
-bindkey '^N' history-search-forward
+bindkey '^r' history-incremental-search-backward
+bindkey '^s' history-incremental-search-forward
+bindkey '^p' history-search-backward
+bindkey '^n' history-search-forward
 
 function ns {
   local cur_dir="$HOME/tmp/scratch/current"
@@ -31,3 +31,5 @@ source $HOME/.keychain/$(hostname)-sh
 export LANG=en_US.utf8
 
 setopt ignoreeof
+
+setopt hist_ignore_all_dups
