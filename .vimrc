@@ -34,6 +34,8 @@ set expandtab
 set shiftwidth=2
 set autoindent
 
+au FileType python setl shiftwidth=4 tabstop=4
+
 " Set windows to not automatically equalize when opening a new one
 set noequalalways
 
@@ -175,6 +177,7 @@ function! Grep(name)
 
 endfunction
 command! -nargs=1 Grep :call Grep("<args>")
+
 
 " ConqueTerm
 map \s :ConqueTermSplit bash<CR>

@@ -1,17 +1,25 @@
 set mbox_type=Maildir
 
-set folder="$HOME/Mail/Maildir/"
+set folder="$HOME/Akamai-Mail/"
 set mask="!&\\[^.]"
-set mbox=$HOME/Mail/Maildir/
-set spoolfile="$HOME/Mail/Maildir/"
-mailboxes ! + `\
-for file in ~/Mail/Maildir/.*; do \
-  box=$(basename "$file"); \
-  if [ ! "$box" = '.' -a ! "$box" = '..' -a ! "$box" = '.customflags' \
-      -a ! "$box" = '.subscriptions' ]; then \
-   echo -n "\"+$box\" "; \
-  fi; \
-done`
+set mbox=$HOME/Akamai-Mail/
+set spoolfile="$HOME/Akamai-Mail/INBOX/"
+#mailboxes ! + `\
+#for file in ~/Akamai-Mail/.*; do \
+#  box=$(basename "$file"); \
+#  if [ ! "$box" = '.' -a ! "$box" = '..' -a ! "$box" = '.customflags' \
+#      -a ! "$box" = '.subscriptions' ]; then \
+#   echo -n "\"+$box\" "; \
+#  fi; \
+#done`
+source ~/.mutt/mailboxes
+
+#mailboxes ="imaps://thigdon@exchange.kendall.corp.akamai.com/Inbox"
+
+#set folder="imaps://thigdon@exchange.kendall.corp.akamai.com"
+#set spoolfile="imaps://thigdon@exchange.kendall.corp.akamai.com/Inbox"
+set realname="Thomas Higdon"
+set mime_forward = yes
 
 macro index c "<change-folder>?<toggle-mailboxes>" "open a different folder"
 macro pager c "<change-folder>?<toggle-mailboxes>" "open a different folder"
@@ -19,15 +27,18 @@ macro pager c "<change-folder>?<toggle-mailboxes>" "open a different folder"
 unignore date
 set move=no
 set header_cache=~/.mutt-cache
-set message_cachedir=~/.mutt-cache-dir
-set record="+.Sent"
-set postponed="+.Drafts"
+set message_cachedir=~/.mutt-cache
+#set record="+.Sent"
+#set postponed="+.Drafts"
 set trash="=Trash"
 set imap_check_subscribed
 set mail_check=60
 set timeout=10
 set net_inc=5
 set implicit_autoview
+bind index,pager $ sync-mailbox
+bind index,pager G imap-fetch-mail
+bind index,pager w change-folder
 
 # split the window
 set pager_index_lines=5
