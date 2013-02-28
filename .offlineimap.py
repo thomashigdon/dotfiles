@@ -1,47 +1,15 @@
 #!/usr/bin/python
 
-import sys
-import gtk
-import gnomekeyring as gkey
+import keyring
 
-class Keyring(object):
-    def __init__(self, name, server, protocol):
-        self._name = name
-        self._server = server
-        self._protocol = protocol
-        self._keyring = gkey.get_default_keyring_sync()
+if keyring.backends.Gnome.Keyring().supported() != -1:
+    keyring.set_keyring(keyring.backends.Gnome.Keyring())
 
-    def has_credentials(self):
-        try:
-            attrs = {"server": self._server, "protocol": self._protocol}
-            items = gkey.find_items_sync(gkey.ITEM_NETWORK_PASSWORD, attrs)
-            return len(items) > 0
-        except gkey.DeniedError:
-            return False
+def set_password(server, user, password):
+    keyring.set_password("offlineimap:%s" % server, user, password)
 
-    def get_credentials(self):
-        attrs = {"server": self._server, "protocol": self._protocol}
-        items = gkey.find_items_sync(gkey.ITEM_NETWORK_PASSWORD, attrs)
-        return (items[0].attributes["user"], items[0].secret)
-
-    def set_credentials(self, (user, pw)):
-        attrs = {
-                "user": user,
-                "server": self._server,
-                "protocol": self._protocol,
-            }
-        gkey.item_create_sync(gkey.get_default_keyring_sync(),
-                gkey.ITEM_NETWORK_PASSWORD, self._name, attrs, pw, True)
-
-def get_username(server):
-    keyring = Keyring("offlineimap", server, "imap")
-    (username, password) = keyring.get_credentials()
-    return username
-
-def get_password(server):
-    keyring = Keyring("offlineimap", server, "imap")
-    (username, password) = keyring.get_credentials()
-    return password
+def get_password(server, user):
+    return keyring.get_password("offlineimap:%s" % server, user)
 
 def mysort(x, y):
     import re
