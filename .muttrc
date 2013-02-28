@@ -28,9 +28,9 @@ unignore date
 set move=no
 set header_cache=~/.mutt-cache
 set message_cachedir=~/.mutt-cache
-#set record="+.Sent"
-#set postponed="+.Drafts"
-set trash="=Trash"
+set record=+"Sent Items"
+set postponed=+"Drafts"
+set trash=+"Deleted Items"
 set imap_check_subscribed
 set mail_check=60
 set timeout=10
@@ -62,4 +62,4 @@ macro pager A |'~/bin/mail2muttalias.py ~/.mutt-aliases'\n
 
 macro index M "T.*\n;WN" "Mark all messages as read"
 
-source .mutt-colors-solarized/mutt-colors-solarized-dark-16.muttrc
+source $HOME/.mutt-colors-solarized/mutt-colors-solarized-dark-16.muttrc
