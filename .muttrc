@@ -63,3 +63,5 @@ macro pager A |'~/bin/mail2muttalias.py ~/.mutt-aliases'\n
 macro index M "T.*\n;WN" "Mark all messages as read"
 
 source $HOME/.mutt-colors-solarized/mutt-colors-solarized-dark-16.muttrc
+
+source $HOME/.bin/notmuch-mutt.rc

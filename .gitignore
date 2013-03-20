@@ -6,4 +6,5 @@
 .ssh/*external*
 .ssh/*deployed*
 .ssh/*thigdon*
+.vim/.netrwhist
 *LOCAL*

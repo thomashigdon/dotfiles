@@ -1,10 +1,23 @@
 export EDITOR="vim"
 
+up-line-or-search-prefix () {
+  local CURSOR_before_search=$CURSOR
+  zle up-line-or-search "$LBUFFER"
+  CURSOR=$CURSOR_before_search
+}
+zle -N up-line-or-search-prefix
+down-line-or-search-prefix () {
+  local CURSOR_before_search=$CURSOR
+  zle down-line-or-search "$LBUFFER"
+  CURSOR=$CURSOR_before_search
+}
+zle -N down-line-or-search-prefix
+
 # vi style incremental search
 bindkey '^r' history-incremental-search-backward
 bindkey '^s' history-incremental-search-forward
-bindkey '^p' history-search-backward
-bindkey '^n' history-search-forward
+bindkey '^p' up-line-or-search-prefix
+bindkey '^n' down-line-or-search-prefix
 
 function ns {
   local cur_dir="$HOME/tmp/scratch/current"
