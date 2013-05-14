@@ -34,9 +34,9 @@ COMPLETION_WAITING_DOTS="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(git macports osx perl rsync vi-mode brew command-not-found cp dircycle)
 
-source $HOME/.zshrc-custom
-
 source $ZSH/oh-my-zsh.sh
+
+source $HOME/.zshrc-custom
 
 # Customize to your needs...
 export PATH=$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/local/munki:/opt/local/bin

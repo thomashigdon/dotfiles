@@ -47,7 +47,13 @@ setopt ignoreeof
 
 setopt hist_ignore_all_dups
 
-touch $HOME/.Xdbus
-chmod 600 $HOME/.Xdbus
-env | grep DBUS_SESSION_BUS_ADDRESS > $HOME/.Xdbus
-echo 'export DBUS_SESSION_BUS_ADDRESS' >> $HOME/.Xdbus
+eval $(dircolors ~/.dircolors)
+
+source $HOME/.zshrc-akamai
+
+# Enable Ctrl-x-e to edit command line
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd v edit-command-line
+
+grep1() { awk -v pattern="${1:?pattern is empty}" 'NR==1 || $0~pattern' "${2:?filename is empty}"; }

@@ -29,9 +29,9 @@ set bs=2
 set nocp
 
 " tab stuff (tabs are spaces, tabs are two spaces)
-set ts=2
+set ts=8
 set expandtab
-set shiftwidth=2
+set shiftwidth=4
 set autoindent
 
 au FileType python setl shiftwidth=4 tabstop=4
@@ -52,6 +52,9 @@ filetype plugin indent on
 set nocompatible
 
 set background=dark
+"let g:solarized_degrade=1
+"let g:solarized_termcolors=256
+"let g:solarized_contrast="high"
 colorscheme solarized
 
 autocmd Syntax * syn match ExtraWhitespace /\s\+$/
@@ -245,7 +248,7 @@ nnoremap <leader><space> :noh<cr>
 set wrap
 set textwidth=79
 set formatoptions=qrn1
-set colorcolumn=85
+set colorcolumn=80
 
 nnoremap ; :
 
