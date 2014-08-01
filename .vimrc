@@ -246,9 +246,9 @@ set gdefault
 nnoremap <leader><space> :noh<cr>
 
 set wrap
-set textwidth=79
+set textwidth=73
 set formatoptions=qrn1
-set colorcolumn=80
+set colorcolumn=73
 
 nnoremap ; :
 
