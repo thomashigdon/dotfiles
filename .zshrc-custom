@@ -30,7 +30,7 @@ if [[ $OSTYPE =~ ^darwin ]]; then
   [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
 fi
 
-keychain $(for x in internal external deployed github;
+keychain $(for x in sonos github;
              do echo $HOME/.keys/*$x | awk '{print $NF}';
            done)
 source $HOME/.keychain/$(hostname)-sh
@@ -42,8 +42,6 @@ setopt ignoreeof
 setopt hist_ignore_all_dups
 
 eval $(dircolors ~/.dircolors)
-
-source $HOME/.zshrc-akamai
 
 # Enable Ctrl-x-e to edit command line
 autoload -U edit-command-line

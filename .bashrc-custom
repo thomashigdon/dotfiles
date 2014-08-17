@@ -1,0 +1,30 @@
+export EDITOR="vim"
+
+function ns {
+  local cur_dir="$HOME/tmp/scratch/current"
+  local new_dir="$HOME/tmp/scratch/`date +'%s'`"
+
+  mv $cur_dir $new_dir
+  mkdir -p $cur_dir
+  rm ~/scratch
+  ln -s $cur_dir ~/scratch 
+  cd ~/scratch
+  echo "New scratch dir ready"
+}
+
+# autojump
+if [[ $OSTYPE =~ ^darwin ]]; then
+  [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
+fi
+
+keychain $(for x in sonos github;
+             do echo $HOME/.keys/*$x | awk '{print $NF}';
+           done)
+source $HOME/.keychain/$(hostname)-sh
+
+export LANG=en_US.utf8
+
+eval $(dircolors ~/.dircolors)
+
+grep1() { awk -v pattern="${1:?pattern is empty}" 'NR==1 || $0~pattern' "${2:?filename is empty}"; }
+
