@@ -33,3 +33,5 @@ source $HOME/.bashrc-sonos
 export JAVA_HOME=/usr/lib/jvm/default-java
 
 set -o vi
+
+export PATH=$HOME/.bin:$PATH
