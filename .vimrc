@@ -262,3 +262,8 @@ let g:Powerline_symbols = 'fancy'
 map <leader>rp :VimuxPromptCommand<CR>
 map <leader>rl :VimuxRunLastCommand<CR>
 map <leader>rq :VimuxCloseRunner<CR>
+
+python from powerline.vim import setup as powerline_setup
+python powerline_setup()
+python del powerline_setup
+set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim
