@@ -29,3 +29,8 @@ eval $(dircolors ~/.dircolors)
 
 grep1() { awk -v pattern="${1:?pattern is empty}" 'NR==1 || $0~pattern' "${2:?filename is empty}"; }
 
+source $HOME/.bashrc-sonos
+
+export JAVA_HOME=/usr/lib/jvm/default-java
+
+set -o vi
