@@ -46,7 +46,7 @@ set noequalalways
 "autocmd BufEnter * lcd %:p:h
 "set autochdir
 
-autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+""autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 
 syntax enable
 filetype off
@@ -55,11 +55,12 @@ set nocompatible
 
 set background=dark
 set t_Co=16
+""set background=dark
 "let g:solarized_degrade=1
 let g:solarized_termcolors=16
 let g:solarized_termtrans = 1
 "let g:solarized_contrast="high"
-colorscheme solarized
+""colorscheme solarized
 
 autocmd Syntax * syn match ExtraWhitespace /\s\+$/
 
