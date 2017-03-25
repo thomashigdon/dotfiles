@@ -1,7 +1,20 @@
 execute pathogen#infect()
-call plug#begin('~/.vim/plugged')
-Plug 'mhinz/vim-signify'
-call plug#end()
+"call plug#begin('~/.vim/plugged')
+"call plug#end()
+set nocompatible              " be iMproved, required
+filetype off                  " required
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+" "call vundle#begin('~/some/path/here')
+"
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'mhinz/vim-signify'
+call vundle#end()            " required
+filetype plugin indent on    " required
+
 " Shortcut for moving through tabs
 map <S-h> gT
 map <S-l> gt
