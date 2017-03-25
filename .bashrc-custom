@@ -24,9 +24,9 @@ if [[ $OSTYPE =~ ^darwin ]]; then
   alias airport='sudo /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
 fi
 
-keychain $(for x in sonos github home;
-             do echo $HOME/.keys/*$x | awk '{print $NF}';
-           done)
+keychain -q $(for x in sonos github home;
+              do echo $HOME/.keys/*$x | awk '{print $NF}';
+             done)
 source $HOME/.keychain/$(hostname)-sh
 
 export LANG=en_US.utf8
