@@ -43,7 +43,7 @@ set noequalalways
 "autocmd BufEnter * lcd %:p:h
 "set autochdir
 
-autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+""autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 
 syntax enable
 filetype off
@@ -51,11 +51,11 @@ call pathogen#runtime_append_all_bundles()
 filetype plugin indent on
 set nocompatible
 
-set background=dark
+""set background=dark
 "let g:solarized_degrade=1
 "let g:solarized_termcolors=256
 "let g:solarized_contrast="high"
-colorscheme solarized
+""colorscheme solarized
 
 autocmd Syntax * syn match ExtraWhitespace /\s\+$/
 
