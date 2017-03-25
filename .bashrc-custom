@@ -31,7 +31,9 @@ source $HOME/.keychain/$(hostname)-sh
 
 export LANG=en_US.utf8
 
-eval $(dircolors ~/.dircolors)
+if command -v dircolors >/dev/null 2>&1; then
+    eval $(dircolors ~/.dircolors)
+fi
 
 grep1() { awk -v pattern="${1:?pattern is empty}" 'NR==1 || $0~pattern' "${2:?filename is empty}"; }
 
