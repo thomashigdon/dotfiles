@@ -1,0 +1,49 @@
+#!/usr/bin/python
+
+from argparse import ArgumentParser
+import os
+import httplib2
+
+def get_ip():
+    import socket
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(('8.8.8.8', 80))
+        return s.getsockname()[0]
+    finally:
+        s.close()
+
+def find_default_dir():
+    try:
+        base_path = os.path.join(os.environ['HOME'], 'public_html')
+        files = os.listdir(base_path)
+        dirs = [ d for d in files if os.path.isdir(os.path.join(base_path, d)) ]
+        recent_dir = max(dirs, key=lambda x: os.path.getmtime(os.path.join(base_path, x)))
+        return recent_dir
+    except OSError:
+        return
+
+default_dir = find_default_dir()
+myip = get_ip()
+
+parser = ArgumentParser(description='update sonos baseurl for a given device')
+parser.add_argument('target', action='store', help="device we'll update")
+parser.add_argument('--url', action='store', help='override url')
+parser.add_argument('--directory', action='store', default=default_dir,
+                    help="directory we'll update to relative to ~/public_html -- defaults to most recently updated dir in ~/public_html (%s)" % default_dir)
+parser.add_argument('--host', action='store', default=myip,
+                    help="The host the target will update from (defaults to local ip (%s))" % myip)
+args = parser.parse_args()
+
+if not args.directory:
+    raise Exception("Could not use default dir, you'll need to specify via --directory or -d")
+
+if not args.url:
+    baseurl = "http://%s/~%s/%s/" % (args.host, os.environ['USER'], args.directory)
+    fullurl = "http://%s:1400/setstring?OnlineUpdateBaseURL=%s" % (args.target, baseurl)
+else:
+    fullurl = "http://%s:1400/setstring?OnlineUpdateBaseURL=%s" % (args.target, args.url)
+
+print "doing HTTP GET to %s on %s" % (args.target, fullurl)
+
+resp, content = httplib2.Http().request(fullurl)

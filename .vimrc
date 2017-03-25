@@ -1,4 +1,7 @@
 execute pathogen#infect()
+call plug#begin('~/.vim/plugged')
+Plug 'mhinz/vim-signify'
+call plug#end()
 " Shortcut for moving through tabs
 map <S-h> gT
 map <S-l> gt
@@ -47,13 +50,14 @@ autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 
 syntax enable
 filetype off
-call pathogen#runtime_append_all_bundles()
 filetype plugin indent on
 set nocompatible
 
 set background=dark
+set t_Co=16
 "let g:solarized_degrade=1
-"let g:solarized_termcolors=256
+let g:solarized_termcolors=16
+let g:solarized_termtrans = 1
 "let g:solarized_contrast="high"
 colorscheme solarized
 
@@ -82,7 +86,7 @@ set tags=tags;/
 
 " mouse scroll wheel stuff (works in screen, yay)
 set mouse=a
-set ttymouse=xterm
+set ttymouse=xterm2
 :map <M-Esc>[62~ <MouseDown>
 :map! <M-Esc>[62~ <MouseDown>
 :map <M-Esc>[63~ <MouseUp>
@@ -258,12 +262,16 @@ au FocusLost * :wa
 inoremap jj <ESC>
 
 let g:Powerline_symbols = 'fancy'
+"let g:solarized_termcolors = 256
 
 map <leader>rp :VimuxPromptCommand<CR>
 map <leader>rl :VimuxRunLastCommand<CR>
 map <leader>rq :VimuxCloseRunner<CR>
 
-python from powerline.vim import setup as powerline_setup
-python powerline_setup()
-python del powerline_setup
+"python from powerline.vim import setup as powerline_setup
+"python powerline_setup()
+"python del powerline_setup
 set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim
+
+let g:signify_vcs_list = [ 'perforce', 'git' ]
+let g:signify_line_highlight = 1

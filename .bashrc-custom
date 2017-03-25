@@ -31,8 +31,64 @@ grep1() { awk -v pattern="${1:?pattern is empty}" 'NR==1 || $0~pattern' "${2:?fi
 
 source $HOME/.bashrc-sonos
 
-export JAVA_HOME=/usr/lib/jvm/default-java
+export JAVA_HOME=/usr/lib/jvm/java-7-oracle
 
 set -o vi
 
-export PATH=$HOME/.bin:$PATH
+export PATH=$HOME/.bin:$HOME/scripts/$PATH
+
+export HISTCONTROL=erasedups
+export HISTSIZE=100000
+shopt -s histappend
+
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+stty -ixon
+
+# Enable programmable completion features.
+if [ -f /etc/bash_completion ]; then
+    source /etc/bash_completion
+fi
+
+PS1='${debian_chroot:+($debian_chroot)}\u@\h:\d at \t:\w\n\$ '
+
+function goto_dir()
+{
+  WHERETO="$1"
+  shift
+ 
+  # If we're already there, duh
+  if echo "$PWD" | grep "$WHERETO$" &>/dev/null; then
+    return 0
+  fi
+ 
+  # Locate base directory
+  ROOTDIR="$PWD"
+  while [ 1 ]; do
+    if [ -d "$ROOTDIR/$WHERETO" ]; then
+      break
+    fi
+    if [ "$ROOTDIR" = "/" ]; then
+      break
+    fi
+    ROOTDIR="$(dirname $ROOTDIR)"
+  done
+ 
+  if [ ! -d "$ROOTDIR/$WHERETO" ]; then
+    echo "Cannot find $WHERETO directory." >&2
+    return 1
+  fi
+ 
+  # Go to the directory
+  pushd "$ROOTDIR/$WHERETO"
+}
+ 
+export WILDFLY_HOME=/usr/local/wildfly/current
+export JBOSS_HOME=${WILDFLY_HOME}
+
+export LOCATE_PATH=$HOME/var/lib/mlocate/mlocate.db:$LOCATE_PATH
+export DBPATH=$HOME/var/lib/mlocate/mlocate.db
+export CCACHE=ccache
+export LANGUAGE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_TYPE=en_US.UTF-8
