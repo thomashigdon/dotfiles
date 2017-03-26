@@ -288,4 +288,6 @@ map <leader>rq :VimuxCloseRunner<CR>
 set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim
 
 let g:signify_vcs_list = [ 'perforce', 'git' ]
-let g:signify_line_highlight = 1
+"let g:signify_line_highlight = 1
+
+let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
