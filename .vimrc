@@ -11,9 +11,9 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 " Plugin 'Valloric/YouCompleteMe'
+Plugin 'altercation/vim-colors-solarized'
 Plugin 'mhinz/vim-signify'
 Plugin 'vim-scripts/genutils'
-Plugin 'idbrii/vim-perforce'
 Plugin 'rdnetto/YCM-Generator'
 Plugin 'scrooloose/nerdtree'
 Plugin 'jistr/vim-nerdtree-tabs'
@@ -26,6 +26,11 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'Shougo/unite.vim'
 Plugin 'devjoe/vim-codequery'
 Plugin 'mileszs/ack.vim'
+
+if filereadable("/usr/bin/p4")
+    Plugin 'idbrii/vim-perforce'
+endif
+
 call vundle#end()            " required
 filetype plugin indent on    " required
 
