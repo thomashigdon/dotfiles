@@ -36,6 +36,7 @@ export LANG=en_US.utf8
 if command -v dircolors >/dev/null 2>&1; then
     echo "eval dircolors"
     eval $(dircolors ~/.dircolors)
+    #eval `dircolors /path/to/dircolorsdb`
 fi
 
 grep1() { awk -v pattern="${1:?pattern is empty}" 'NR==1 || $0~pattern' "${2:?filename is empty}"; }

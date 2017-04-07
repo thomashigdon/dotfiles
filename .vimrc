@@ -1,7 +1,34 @@
 execute pathogen#infect()
-call plug#begin('~/.vim/plugged')
-Plug 'mhinz/vim-signify'
-call plug#end()
+"call plug#begin('~/.vim/plugged')
+"call plug#end()
+set nocompatible              " be iMproved, required
+filetype off                  " required
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+" "call vundle#begin('~/some/path/here')
+"
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+" Plugin 'Valloric/YouCompleteMe'
+Plugin 'mhinz/vim-signify'
+Plugin 'vim-scripts/genutils'
+Plugin 'idbrii/vim-perforce'
+Plugin 'rdnetto/YCM-Generator'
+Plugin 'scrooloose/nerdtree'
+Plugin 'jistr/vim-nerdtree-tabs'
+Plugin 'mbbill/undotree'
+Plugin 'jlanzarotta/bufexplorer'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'vim-syntastic/syntastic'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'Shougo/unite.vim'
+Plugin 'devjoe/vim-codequery'
+Plugin 'mileszs/ack.vim'
+call vundle#end()            " required
+filetype plugin indent on    " required
+
 " Shortcut for moving through tabs
 map <S-h> gT
 map <S-l> gt
@@ -54,13 +81,20 @@ filetype plugin indent on
 set nocompatible
 
 set background=dark
-set t_Co=16
+"set t_Co=16
 ""set background=dark
 "let g:solarized_degrade=1
-let g:solarized_termcolors=16
+"let g:solarized_termcolors=16
 let g:solarized_termtrans = 1
 "let g:solarized_contrast="high"
-""colorscheme solarized
+colorscheme solarized
+let g:solarized_termcolors=256 " color depth
+let g:solarized_termtrans=0 " 1|0 background transparent
+let g:solarized_bold=1 " 1|0 show bold fonts
+let g:solarized_italic=1 " 1|0 show italic fonts
+let g:solarized_underline=1 " 1|0 show underlines
+let g:solarized_contrast="high" " normal|high|low contrast
+let g:solarized_visibility="normal " " normal|high|low effect on whitespace characters
 
 autocmd Syntax * syn match ExtraWhitespace /\s\+$/
 
@@ -263,7 +297,7 @@ au FocusLost * :wa
 inoremap jj <ESC>
 
 let g:Powerline_symbols = 'fancy'
-"let g:solarized_termcolors = 256
+let g:solarized_termcolors = 256
 
 map <leader>rp :VimuxPromptCommand<CR>
 map <leader>rl :VimuxRunLastCommand<CR>
@@ -275,4 +309,42 @@ map <leader>rq :VimuxCloseRunner<CR>
 set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim
 
 let g:signify_vcs_list = [ 'perforce', 'git' ]
-let g:signify_line_highlight = 1
+"let g:signify_line_highlight = 1
+
+"let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+let g:ycm_log_level = 'debug'
+let g:ycm_server_use_vim_stdout = 1
+let g:ycm_server_log_level = 'debug'
+let g:ycm_confirm_extra_conf = 0
+
+let g:perforce_open_on_change = 1
+
+" We need this for plugins like Syntastic and vim-gitgutter which put symbols
+" in the sign column.
+hi clear SignColumn
+
+" ----- scrooloose/syntastic settings -----
+let g:syntastic_error_symbol = '✘'
+let g:syntastic_warning_symbol = "▲"
+augroup mySyntastic
+  au!
+  au FileType tex let b:syntastic_mode = "passive"
+augroup END
+
+" Finally, uncomment the next line
+let g:airline_powerline_fonts = 1
+
+" Show PASTE if in paste mode
+let g:airline_detect_paste=1
+
+" Show airline for tabs too
+let g:airline#extensions#tabline#enabled = 1
+
+" Use the solarized theme for the Airline status bar
+let g:airline_theme='solarized'
+
+map <Leader>n <plug>NERDTreeTabsToggle<CR>
+map <Leader>m <plug>NERDTreeTabsFind<CR>
+
+let g:nerdtree_tabs_open_on_console_startup = 1
+let g:nerdtree_tabs_autofind = 1
