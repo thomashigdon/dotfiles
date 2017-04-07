@@ -22,6 +22,8 @@ if [[ $OSTYPE =~ ^darwin ]]; then
   [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
   export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin
   alias airport='sudo /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
+  alias ls='gls --color=auto'
+  alias dircolors='gdircolors'
 fi
 
 keychain -q $(for x in sonos github home;
@@ -32,6 +34,7 @@ source $HOME/.keychain/$(hostname)-sh
 export LANG=en_US.utf8
 
 if command -v dircolors >/dev/null 2>&1; then
+    echo "eval dircolors"
     eval $(dircolors ~/.dircolors)
     #eval `dircolors /path/to/dircolorsdb`
 fi
@@ -48,7 +51,7 @@ set -o vi
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
-export PATH=$PATH:$HOME/.bin:$HOME/scripts
+export PATH=$HOME/bin:$PATH:$HOME/.bin:$HOME/scripts
 alias xpra="/Applications/Xpra.app/Contents/MacOS/Xpra"
 export LANGUAGE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
