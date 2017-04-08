@@ -26,7 +26,8 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'Shougo/unite.vim'
 Plugin 'devjoe/vim-codequery'
 Plugin 'mileszs/ack.vim'
-
+Plugin 'majutsushi/tagbar'
+Plugin 'benmills/vimux'
 if filereadable("/usr/bin/p4")
     Plugin 'idbrii/vim-perforce'
 endif
@@ -86,20 +87,22 @@ filetype plugin indent on
 set nocompatible
 
 set background=dark
+colorscheme solarized
 "set t_Co=16
 ""set background=dark
 "let g:solarized_degrade=1
 "let g:solarized_termcolors=16
 let g:solarized_termtrans = 1
 "let g:solarized_contrast="high"
-colorscheme solarized
 let g:solarized_termcolors=256 " color depth
 let g:solarized_termtrans=0 " 1|0 background transparent
 let g:solarized_bold=1 " 1|0 show bold fonts
 let g:solarized_italic=1 " 1|0 show italic fonts
 let g:solarized_underline=1 " 1|0 show underlines
-let g:solarized_contrast="high" " normal|high|low contrast
+let g:solarized_contrast="normal" " normal|high|low contrast
 let g:solarized_visibility="normal " " normal|high|low effect on whitespace characters
+let g:solarized_termcolors = 256
+
 
 autocmd Syntax * syn match ExtraWhitespace /\s\+$/
 
@@ -301,9 +304,6 @@ au FocusLost * :wa
 "" set jj to be escape
 inoremap jj <ESC>
 
-let g:Powerline_symbols = 'fancy'
-let g:solarized_termcolors = 256
-
 map <leader>rp :VimuxPromptCommand<CR>
 map <leader>rl :VimuxRunLastCommand<CR>
 map <leader>rq :VimuxCloseRunner<CR>
@@ -353,3 +353,5 @@ map <Leader>m <plug>NERDTreeTabsFind<CR>
 
 let g:nerdtree_tabs_open_on_console_startup = 1
 let g:nerdtree_tabs_autofind = 1
+
+nmap <F8> :TagbarToggle<CR>

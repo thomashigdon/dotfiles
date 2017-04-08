@@ -109,7 +109,6 @@ export JBOSS_HOME=${WILDFLY_HOME}
 
 export LOCATE_PATH=$HOME/var/lib/mlocate/mlocate.db:$LOCATE_PATH
 export DBPATH=$HOME/var/lib/mlocate/mlocate.db
-export CCACHE=ccache
 export LANGUAGE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
