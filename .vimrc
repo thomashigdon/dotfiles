@@ -1,16 +1,11 @@
-execute pathogen#infect()
-"call plug#begin('~/.vim/plugged')
-"call plug#end()
 set nocompatible              " be iMproved, required
 filetype off                  " required
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-" "call vundle#begin('~/some/path/here')
-"
+
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
-" Plugin 'Valloric/YouCompleteMe'
+Plugin 'Valloric/YouCompleteMe'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'mhinz/vim-signify'
 Plugin 'vim-scripts/genutils'
@@ -28,6 +23,7 @@ Plugin 'devjoe/vim-codequery'
 Plugin 'mileszs/ack.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'benmills/vimux'
+Plugin 'tpope/vim-sleuth'
 if filereadable("/usr/bin/p4")
     Plugin 'idbrii/vim-perforce'
 endif
@@ -86,23 +82,21 @@ filetype off
 filetype plugin indent on
 set nocompatible
 
-set background=dark
-colorscheme solarized
-"set t_Co=16
+set t_Co=16
 ""set background=dark
 "let g:solarized_degrade=1
 "let g:solarized_termcolors=16
 let g:solarized_termtrans = 1
 "let g:solarized_contrast="high"
-let g:solarized_termcolors=256 " color depth
+let g:solarized_termcolors=16 " color depth
 let g:solarized_termtrans=0 " 1|0 background transparent
 let g:solarized_bold=1 " 1|0 show bold fonts
 let g:solarized_italic=1 " 1|0 show italic fonts
 let g:solarized_underline=1 " 1|0 show underlines
 let g:solarized_contrast="normal" " normal|high|low contrast
 let g:solarized_visibility="normal " " normal|high|low effect on whitespace characters
-let g:solarized_termcolors = 256
-
+set background=dark
+colorscheme solarized
 
 autocmd Syntax * syn match ExtraWhitespace /\s\+$/
 
