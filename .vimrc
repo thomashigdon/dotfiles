@@ -1,20 +1,15 @@
-execute pathogen#infect()
-"call plug#begin('~/.vim/plugged')
-"call plug#end()
 set nocompatible              " be iMproved, required
 filetype off                  " required
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-" "call vundle#begin('~/some/path/here')
-"
+
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
-" Plugin 'Valloric/YouCompleteMe'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'rdnetto/YCM-Generator'
+Plugin 'altercation/vim-colors-solarized'
 Plugin 'mhinz/vim-signify'
 Plugin 'vim-scripts/genutils'
-Plugin 'idbrii/vim-perforce'
-Plugin 'rdnetto/YCM-Generator'
 Plugin 'scrooloose/nerdtree'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'mbbill/undotree'
@@ -26,8 +21,18 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'Shougo/unite.vim'
 Plugin 'devjoe/vim-codequery'
 Plugin 'mileszs/ack.vim'
+Plugin 'majutsushi/tagbar'
+Plugin 'benmills/vimux'
+Plugin 'tpope/vim-sleuth'
+Plugin 'jeaye/color_coded'
+
+if filereadable("/usr/bin/p4")
+    Plugin 'idbrii/vim-perforce'
+endif
+
 call vundle#end()            " required
 filetype plugin indent on    " required
+
 
 " Shortcut for moving through tabs
 map <S-h> gT
@@ -73,28 +78,28 @@ set noequalalways
 "autocmd BufEnter * lcd %:p:h
 "set autochdir
 
-""autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 
 syntax enable
 filetype off
 filetype plugin indent on
 set nocompatible
 
-set background=dark
-"set t_Co=16
+set t_Co=16
 ""set background=dark
 "let g:solarized_degrade=1
 "let g:solarized_termcolors=16
 let g:solarized_termtrans = 1
 "let g:solarized_contrast="high"
-colorscheme solarized
-let g:solarized_termcolors=256 " color depth
+let g:solarized_termcolors=16 " color depth
 let g:solarized_termtrans=0 " 1|0 background transparent
 let g:solarized_bold=1 " 1|0 show bold fonts
 let g:solarized_italic=1 " 1|0 show italic fonts
 let g:solarized_underline=1 " 1|0 show underlines
-let g:solarized_contrast="high" " normal|high|low contrast
+let g:solarized_contrast="normal" " normal|high|low contrast
 let g:solarized_visibility="normal " " normal|high|low effect on whitespace characters
+set background=dark
+colorscheme solarized
 
 autocmd Syntax * syn match ExtraWhitespace /\s\+$/
 
@@ -157,8 +162,6 @@ vmap <C-J> <Esc>:call <SID>Saving_scroll("gv1<C-V><C-D>")<CR>
 nmap <C-K>      :call <SID>Saving_scroll("1<C-V><C-U>")<CR>
 vmap <C-K> <Esc>:call <SID>Saving_scroll("gv1<C-V><C-U>")<CR>
 
-" Trailing whitespace highlighting
-"highlight ExtraWhitespace ctermbg=red guibg=red
 " set list listchars=trail:_
 " highlight SpecialKey ctermfg=DarkGray ctermbg=yellow
 
@@ -296,9 +299,6 @@ au FocusLost * :wa
 "" set jj to be escape
 inoremap jj <ESC>
 
-let g:Powerline_symbols = 'fancy'
-let g:solarized_termcolors = 256
-
 map <leader>rp :VimuxPromptCommand<CR>
 map <leader>rl :VimuxRunLastCommand<CR>
 map <leader>rq :VimuxCloseRunner<CR>
@@ -330,6 +330,14 @@ augroup mySyntastic
   au!
   au FileType tex let b:syntastic_mode = "passive"
 augroup END
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
 " Finally, uncomment the next line
 let g:airline_powerline_fonts = 1
@@ -348,3 +356,6 @@ map <Leader>m <plug>NERDTreeTabsFind<CR>
 
 let g:nerdtree_tabs_open_on_console_startup = 1
 let g:nerdtree_tabs_autofind = 1
+
+nmap <F8> :TagbarToggle<CR>
+

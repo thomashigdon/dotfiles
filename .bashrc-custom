@@ -34,9 +34,7 @@ source $HOME/.keychain/$(hostname)-sh
 export LANG=en_US.utf8
 
 if command -v dircolors >/dev/null 2>&1; then
-    echo "eval dircolors"
     eval $(dircolors ~/.dircolors)
-    #eval `dircolors /path/to/dircolorsdb`
 fi
 
 grep1() { awk -v pattern="${1:?pattern is empty}" 'NR==1 || $0~pattern' "${2:?filename is empty}"; }
@@ -63,6 +61,7 @@ export HISTCONTROL=erasedups
 export HISTSIZE=100000
 shopt -s histappend
 
+export PROMPT_COMMAND=""
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 stty -ixon
 
@@ -103,14 +102,41 @@ function goto_dir()
   # Go to the directory
   pushd "$ROOTDIR/$WHERETO"
 }
- 
+
+# Update tmux window titles when command is executed
+case ${TERM} in
+
+    screen*)
+
+        # user command to change default pane title on demand
+        function title { TMUX_PANE_TITLE="$*"; }
+
+        # function that performs the title update (invoked as PROMPT_COMMAND)
+        function update_title { printf "\033]2;%s\033\\" "${1:-$TMUX_PANE_TITLE}"; }
+
+        # default pane title is the name of the current process (i.e. 'bash')
+        TMUX_PANE_TITLE=$(ps -o comm $$ | tail -1)
+
+        # Reset title to the default before displaying the command prompt
+        PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND }'update_title'   
+
+        # Update title before executing a command: set it to the command
+        trap 'update_title "$BASH_COMMAND"' DEBUG
+
+        ;;
+
+esac
+
 export WILDFLY_HOME=/usr/local/wildfly/current
 export JBOSS_HOME=${WILDFLY_HOME}
 
 export LOCATE_PATH=$HOME/var/lib/mlocate/mlocate.db:$LOCATE_PATH
 export DBPATH=$HOME/var/lib/mlocate/mlocate.db
-export CCACHE=ccache
 export LANGUAGE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LC_TYPE=en_US.UTF-8
+
+alias tmux="tmux -2"
+
+#. /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline.sh
