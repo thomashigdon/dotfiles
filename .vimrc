@@ -6,10 +6,10 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'rdnetto/YCM-Generator'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'mhinz/vim-signify'
 Plugin 'vim-scripts/genutils'
-Plugin 'rdnetto/YCM-Generator'
 Plugin 'scrooloose/nerdtree'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'mbbill/undotree'
@@ -24,12 +24,15 @@ Plugin 'mileszs/ack.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'benmills/vimux'
 Plugin 'tpope/vim-sleuth'
+Plugin 'jeaye/color_coded'
+
 if filereadable("/usr/bin/p4")
     Plugin 'idbrii/vim-perforce'
 endif
 
 call vundle#end()            " required
 filetype plugin indent on    " required
+
 
 " Shortcut for moving through tabs
 map <S-h> gT
@@ -75,7 +78,7 @@ set noequalalways
 "autocmd BufEnter * lcd %:p:h
 "set autochdir
 
-""autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 
 syntax enable
 filetype off
@@ -159,8 +162,6 @@ vmap <C-J> <Esc>:call <SID>Saving_scroll("gv1<C-V><C-D>")<CR>
 nmap <C-K>      :call <SID>Saving_scroll("1<C-V><C-U>")<CR>
 vmap <C-K> <Esc>:call <SID>Saving_scroll("gv1<C-V><C-U>")<CR>
 
-" Trailing whitespace highlighting
-"highlight ExtraWhitespace ctermbg=red guibg=red
 " set list listchars=trail:_
 " highlight SpecialKey ctermfg=DarkGray ctermbg=yellow
 
@@ -329,6 +330,14 @@ augroup mySyntastic
   au!
   au FileType tex let b:syntastic_mode = "passive"
 augroup END
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
 " Finally, uncomment the next line
 let g:airline_powerline_fonts = 1
@@ -349,3 +358,4 @@ let g:nerdtree_tabs_open_on_console_startup = 1
 let g:nerdtree_tabs_autofind = 1
 
 nmap <F8> :TagbarToggle<CR>
+
