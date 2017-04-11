@@ -24,6 +24,9 @@ if [[ $OSTYPE =~ ^darwin ]]; then
   alias airport='sudo /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
   alias ls='gls --color=auto -N'
   alias dircolors='gdircolors'
+  # This silliness was needed to the right stuff into pythonpath to get
+  # powerline working.
+  export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python2.7/site-packages
 fi
 
 keychain -q $(for x in sonos github home;
