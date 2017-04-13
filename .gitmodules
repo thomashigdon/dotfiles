@@ -37,3 +37,6 @@
 [submodule ".mutt-colors-solarized"]
 	path = .mutt-colors-solarized
 	url = git://github.com/altercation/mutt-colors-solarized.git
+[submodule ".lib/python-p4lib"]
+	path = .lib/python-p4lib
+	url = https://github.com/trentm/python-p4lib

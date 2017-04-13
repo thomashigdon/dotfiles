@@ -52,7 +52,7 @@ set -o vi
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
-export PATH=$HOME/bin:$PATH:$HOME/.bin:$HOME/scripts
+export PATH=$HOME/.bin:$HOME/bin:$HOME/scripts:$PATH
 alias xpra="/Applications/Xpra.app/Contents/MacOS/Xpra"
 export LANGUAGE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -139,6 +139,8 @@ export LANGUAGE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LC_TYPE=en_US.UTF-8
+
+export PYTHONPATH=$PYTHONPATH:$HOME/.lib/python-p4lib/lib
 
 alias tmux="tmux -2"
 
