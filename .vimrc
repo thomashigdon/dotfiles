@@ -306,7 +306,7 @@ map <leader>rq :VimuxCloseRunner<CR>
 "python from powerline.vim import setup as powerline_setup
 "python powerline_setup()
 "python del powerline_setup
-set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim
+"set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim
 
 let g:signify_vcs_list = [ 'perforce', 'git' ]
 "let g:signify_line_highlight = 1
@@ -359,3 +359,7 @@ let g:nerdtree_tabs_autofind = 1
 
 nmap <F8> :TagbarToggle<CR>
 
+omap ic <plug>(signify-motion-inner-pending)
+xmap ic <plug>(signify-motion-inner-visual)
+omap ac <plug>(signify-motion-outer-pending)
+xmap ac <plug>(signify-motion-outer-visual)

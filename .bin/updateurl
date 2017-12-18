@@ -46,4 +46,4 @@ else:
 
 print "doing HTTP GET to %s on %s" % (args.target, fullurl)
 
-resp, content = httplib2.Http().request(fullurl)
+resp, content = httplib2.Http().request(fullurl, method="POST")
