@@ -20,19 +20,17 @@ function ns {
 # autojump
 if [[ $OSTYPE =~ ^darwin ]]; then
   [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
-  export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin
+  #export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin
   alias airport='sudo /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
   alias ls='gls --color=auto -N'
   alias dircolors='gdircolors'
-  # This silliness was needed to the right stuff into pythonpath to get
-  # powerline working.
-  export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python2.7/site-packages
+  alias vi=vim
 fi
 
-keychain -q $(for x in sonos github home;
-              do echo $HOME/.keys/*$x | awk '{print $NF}';
-             done)
-source $HOME/.keychain/$(hostname)-sh
+#keychain -q $(for x in sonos github home;
+#              do echo $HOME/.keys/*$x | awk '{print $NF}';
+#             done)
+#source $HOME/.keychain/$(hostname)-sh
 
 if command -v dircolors >/dev/null 2>&1; then
     eval $(dircolors ~/.dircolors)
@@ -129,8 +127,6 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LC_TYPE=en_US.UTF-8
 
-export PYTHONPATH=$PYTHONPATH:$HOME/.lib/python-p4lib/lib
-
 alias tmux="tmux -2"
 
 export HISTCONTROL=erasedups
@@ -149,5 +145,7 @@ export HISTFILE=~/.bash_eternal_history
 # Force prompt to write history after every command.
 # http://superuser.com/questions/20900/bash-history-loss
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+
+powerline-daemon -q
 
 #. /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline.sh

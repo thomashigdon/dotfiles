@@ -24,7 +24,7 @@ Plugin 'mileszs/ack.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'benmills/vimux'
 Plugin 'tpope/vim-sleuth'
-Plugin 'jeaye/color_coded'
+"Plugin 'jeaye/color_coded'
 
 if filereadable("/usr/bin/p4")
     Plugin 'idbrii/vim-perforce'
