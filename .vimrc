@@ -5,7 +5,7 @@ call vundle#begin()
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'Valloric/YouCompleteMe'
+"Plugin 'Valloric/YouCompleteMe'
 Plugin 'rdnetto/YCM-Generator'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'mhinz/vim-signify'
@@ -363,3 +363,9 @@ omap ic <plug>(signify-motion-inner-pending)
 xmap ic <plug>(signify-motion-inner-visual)
 omap ac <plug>(signify-motion-outer-pending)
 xmap ac <plug>(signify-motion-outer-visual)
+
+" FB python
+autocmd BufEnter *.cinc :setlocal filetype=python
+autocmd BufEnter *.cconf :setlocal filetype=python
+autocmd BufEnter *.mcconf :setlocal filetype=python
+autocmd BufEnter *.tw :setlocal filetype=python
