@@ -24,7 +24,9 @@ Plugin 'mileszs/ack.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'benmills/vimux'
 Plugin 'tpope/vim-sleuth'
+Plugin 'rkitover/vimpager'
 "Plugin 'jeaye/color_coded'
+Plugin 'brookhong/cscope.vim'
 
 if filereadable("/usr/bin/p4")
     Plugin 'idbrii/vim-perforce'
@@ -49,8 +51,8 @@ set nofoldenable
 set foldlevel=1
 
 " Insert enter when enter is pressed in command mode
-map <S-Enter> O<ESC>
-map <Enter> o<ESC>
+"map <S-Enter> O<ESC>
+"map <Enter> o<ESC>
 
 " Ctrl-h and Ctrl-i can move in insert mode
 imap <C-h> <ESC>hi
@@ -64,9 +66,9 @@ set bs=2
 set nocp
 
 " tab stuff (tabs are spaces, tabs are two spaces)
-set ts=8
+set ts=2
 set expandtab
-set shiftwidth=4
+set shiftwidth=2
 set autoindent
 
 au FileType python setl shiftwidth=4 tabstop=4
@@ -274,7 +276,7 @@ set ttyfast
 set ruler
 set backspace=indent,eol,start
 set laststatus=2
-set relativenumber
+set number
 set undofile
 
 let mapleader = ","
@@ -363,3 +365,47 @@ omap ic <plug>(signify-motion-inner-pending)
 xmap ic <plug>(signify-motion-inner-visual)
 omap ac <plug>(signify-motion-outer-pending)
 xmap ac <plug>(signify-motion-outer-visual)
+
+" FB configerator filetypes
+autocmd BufEnter *.cinc :setlocal filetype=python
+autocmd BufEnter *.cconf :setlocal filetype=python
+autocmd BufEnter *.mcconf :setlocal filetype=python
+autocmd BufEnter *.tw :setlocal filetype=python
+autocmd BufEnter *.materialized_JSON :setlocal filetype=json
+
+" CamelCase and under_score motion
+Plugin 'bkad/CamelCaseMotion'
+map <silent> w <Plug>CamelCaseMotion_w
+map <silent> b <Plug>CamelCaseMotion_b
+map <silent> e <Plug>CamelCaseMotion_e
+map <silent> ge <Plug>CamelCaseMotion_ge
+sunmap w
+sunmap b
+sunmap e
+sunmap ge
+
+Plugin 'elzr/vim-json'
+let g:vim_json_syntax_conceal = 0
+
+Plugin 'tpope/vim-jdaddy'
+
+" The Silver Searcher
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+endif
+
+"au BufReadPost quickfix map <buffer> <Enter> :.cc<CR>
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+" bind \ (backward slash) to grep shortcut
+command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+nnoremap \ :Ag<SPACE>
+
+Plugin 'yssl/QFEnter'
+

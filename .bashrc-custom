@@ -7,13 +7,13 @@ set -o vi
 
 function ns {
   local cur_dir="$HOME/tmp/scratch/current"
-  local new_dir="$HOME/tmp/scratch/`date +'%s'`"
+  local new_dir="$HOME/tmp/scratch/$(date +'%s')"
 
-  mv $cur_dir $new_dir
-  mkdir -p $cur_dir
+  mv "$cur_dir" "$new_dir"
+  mkdir -p "$cur_dir"
   rm ~/scratch
-  ln -s $cur_dir ~/scratch 
-  cd ~/scratch
+  ln -s "$cur_dir" ~/scratch 
+  cd ~/scratch || exit
   echo "New scratch dir ready"
 }
 
@@ -27,10 +27,11 @@ if [[ $OSTYPE =~ ^darwin ]]; then
   alias vi=vim
 fi
 
-#keychain -q $(for x in sonos github home;
-#              do echo $HOME/.keys/*$x | awk '{print $NF}';
-#             done)
-#source $HOME/.keychain/$(hostname)-sh
+export PATH=$HOME/bin:$HOME/bin/third-party:$HOME/bin/mine:$HOME/third-party/bin:$PATH
+keychain -q $(for x in github; do
+               echo $HOME/.keys/*$x | awk '{print $NF}';
+             done)
+source $HOME/.keychain/$(hostname)-sh
 
 if command -v dircolors >/dev/null 2>&1; then
     eval $(dircolors ~/.dircolors)
@@ -38,17 +39,16 @@ fi
 
 grep1() { awk -v pattern="${1:?pattern is empty}" 'NR==1 || $0~pattern' "${2:?filename is empty}"; }
 
-if [ -f $HOME/.bashrc-sonos ]; then
-    source $HOME/.bashrc-sonos
+if [ -f $HOME/.bashrc-fb ]; then
+    source $HOME/.bashrc-fb
 fi
 
-export JAVA_HOME=/usr/lib/jvm/java-7-oracle
+export JAVA_HOME="/usr/local/jdk-8u60-64"
 
 set -o vi
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
-export PATH=$HOME/.bin:$HOME/bin:$HOME/scripts:$PATH
 alias xpra="/Applications/Xpra.app/Contents/MacOS/Xpra"
 
 export PROMPT_COMMAND=""
@@ -145,7 +145,21 @@ export HISTFILE=~/.bash_eternal_history
 # Force prompt to write history after every command.
 # http://superuser.com/questions/20900/bash-history-loss
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
 
 powerline-daemon -q
 
 #. /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline.sh
+
+alias fin='echo DONE'
+alias top=htop
+
+export MANPAGER="/bin/sh -c \"unset PAGER;col -b -x | \
+    vim -R -c 'set ft=diff nomod nolist' -u ~/.vimrc.more -\""
+unset PAGER
+
+# linuxbrew
+export PATH="/home/tph/.linuxbrew/bin:$PATH"
+export MANPATH="/home/tph/.linuxbrew/share/man:$MANPATH"
+export INFOPATH="/home/tph/.linuxbrew/share/info:$INFOPATH"
+export PATH="/home/tph/.linuxbrew/bin:$PATH"
