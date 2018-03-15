@@ -7,19 +7,19 @@ set -o vi
 
 function ns {
   local cur_dir="$HOME/tmp/scratch/current"
-  local new_dir="$HOME/tmp/scratch/`date +'%s'`"
+  local new_dir="$HOME/tmp/scratch/$(date +'%s')"
 
-  mv $cur_dir $new_dir
-  mkdir -p $cur_dir
+  mv "$cur_dir" "$new_dir"
+  mkdir -p "$cur_dir"
   rm ~/scratch
-  ln -s $cur_dir ~/scratch 
-  cd ~/scratch
+  ln -s "$cur_dir" ~/scratch 
+  cd ~/scratch || exit
   echo "New scratch dir ready"
 }
 
 # autojump
 if [[ $OSTYPE =~ ^darwin ]]; then
-  [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
+  [[ -s $(brew --prefix)/etc/autojump.sh ]] && . $(brew --prefix)/etc/autojump.sh
   #export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin
   alias airport='sudo /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
   alias ls='gls --color=auto -N'
@@ -27,7 +27,7 @@ if [[ $OSTYPE =~ ^darwin ]]; then
   alias vi=vim
 fi
 
-export PATH=$HOME/bin:$HOME/bin/third-party:$PATH
+export PATH=$HOME/bin:$HOME/bin/third-party:$HOME/bin/mine:$HOME/third-party/bin:$PATH
 keychain -q $(for x in github; do
                echo $HOME/.keys/*$x | awk '{print $NF}';
              done)
@@ -43,7 +43,7 @@ if [ -f $HOME/.bashrc-fb ]; then
     source $HOME/.bashrc-fb
 fi
 
-export JAVA_HOME=/usr/lib/jvm/java-7-oracle
+export JAVA_HOME="/usr/local/jdk-8u60-64"
 
 set -o vi
 bind '"\e[A": history-search-backward'
@@ -152,3 +152,14 @@ powerline-daemon -q
 #. /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline.sh
 
 alias fin='echo DONE'
+alias top=htop
+
+export MANPAGER="/bin/sh -c \"unset PAGER;col -b -x | \
+    vim -R -c 'set ft=diff nomod nolist' -u ~/.vimrc.more -\""
+unset PAGER
+
+# linuxbrew
+export PATH="/home/tph/.linuxbrew/bin:$PATH"
+export MANPATH="/home/tph/.linuxbrew/share/man:$MANPATH"
+export INFOPATH="/home/tph/.linuxbrew/share/info:$INFOPATH"
+export PATH="/home/tph/.linuxbrew/bin:$PATH"
