@@ -20,7 +20,7 @@ function ns {
 # autojump
 if [[ $OSTYPE =~ ^darwin ]]; then
   [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
-  #export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin
+  export PATH=$PATH:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin
   alias airport='sudo /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
   alias ls='gls --color=auto -N'
   alias dircolors='gdircolors'
