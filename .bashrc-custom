@@ -20,11 +20,18 @@ function ns {
 # autojump
 if [[ $OSTYPE =~ ^darwin ]]; then
   [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
-  export PATH=$PATH:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin
+  export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:$PATH
   alias airport='sudo /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
   alias ls='gls --color=auto -N'
   alias dircolors='gdircolors'
   alias vi=vim
+else
+  export JAVA_HOME="/usr/local/jdk-8u60-64"
+  # linuxbrew
+  export PATH="/home/tph/.linuxbrew/bin:$PATH"
+  export MANPATH="/home/tph/.linuxbrew/share/man:$MANPATH"
+  export INFOPATH="/home/tph/.linuxbrew/share/info:$INFOPATH"
+  export PATH="/home/tph/.linuxbrew/bin:$PATH"
 fi
 
 export PATH=$HOME/bin:$HOME/bin/third-party:$HOME/bin/mine:$HOME/third-party/bin:$PATH
@@ -42,8 +49,6 @@ grep1() { awk -v pattern="${1:?pattern is empty}" 'NR==1 || $0~pattern' "${2:?fi
 if [ -f $HOME/.bashrc-fb ]; then
     source $HOME/.bashrc-fb
 fi
-
-export JAVA_HOME="/usr/local/jdk-8u60-64"
 
 set -o vi
 bind '"\e[A": history-search-backward'
@@ -158,8 +163,3 @@ export MANPAGER="/bin/sh -c \"unset PAGER;col -b -x | \
     vim -R -c 'set ft=diff nomod nolist' -u ~/.vimrc.more -\""
 unset PAGER
 
-# linuxbrew
-export PATH="/home/tph/.linuxbrew/bin:$PATH"
-export MANPATH="/home/tph/.linuxbrew/share/man:$MANPATH"
-export INFOPATH="/home/tph/.linuxbrew/share/info:$INFOPATH"
-export PATH="/home/tph/.linuxbrew/bin:$PATH"

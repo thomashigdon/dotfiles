@@ -4,6 +4,7 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 " let Vundle manage Vundle, required
+
 Plugin 'VundleVim/Vundle.vim'
 "Plugin 'Valloric/YouCompleteMe'
 Plugin 'rdnetto/YCM-Generator'
@@ -25,8 +26,9 @@ Plugin 'majutsushi/tagbar'
 Plugin 'benmills/vimux'
 Plugin 'tpope/vim-sleuth'
 Plugin 'rkitover/vimpager'
-"Plugin 'jeaye/color_coded'
+Plugin 'jeaye/color_coded'
 Plugin 'brookhong/cscope.vim'
+Plugin 'jeetsukumaran/vim-buffergator'
 
 if filereadable("/usr/bin/p4")
     Plugin 'idbrii/vim-perforce'
@@ -35,10 +37,6 @@ endif
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-
-" Shortcut for moving through tabs
-map <S-h> gT
-map <S-l> gt
 
 " Highlight search patterns
 set hlsearch
@@ -356,7 +354,8 @@ let g:airline_theme='solarized'
 map <Leader>n <plug>NERDTreeTabsToggle<CR>
 map <Leader>m <plug>NERDTreeTabsFind<CR>
 
-let g:nerdtree_tabs_open_on_console_startup = 1
+"let g:nerdtree_tabs_open_on_console_startup = 1
+map <C-n> :NERDTreeToggle<CR>
 let g:nerdtree_tabs_autofind = 1
 
 nmap <F8> :TagbarToggle<CR>
@@ -409,3 +408,8 @@ nnoremap \ :Ag<SPACE>
 
 Plugin 'yssl/QFEnter'
 
+" tabs/buffers experiment
+set hidden
+" Shortcut for moving through tabs
+map <S-h> :bprevious<CR>
+map <S-l> :bnext<CR>
