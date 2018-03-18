@@ -6,7 +6,7 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 
 Plugin 'VundleVim/Vundle.vim'
-"Plugin 'Valloric/YouCompleteMe'
+Plugin 'Valloric/YouCompleteMe'
 Plugin 'rdnetto/YCM-Generator'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'mhinz/vim-signify'
@@ -126,7 +126,9 @@ set tags=tags;/
 
 " mouse scroll wheel stuff (works in screen, yay)
 set mouse=a
-set ttymouse=xterm2
+if ! has('nvim-0.1.5')
+  set ttymouse=xterm2
+endif
 :map <M-Esc>[62~ <MouseDown>
 :map! <M-Esc>[62~ <MouseDown>
 :map <M-Esc>[63~ <MouseUp>
@@ -397,7 +399,7 @@ if executable('ag')
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 
   " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
+  let g:ctrlp_use_caching = 1
 endif
 
 "au BufReadPost quickfix map <buffer> <Enter> :.cc<CR>
@@ -413,3 +415,6 @@ set hidden
 " Shortcut for moving through tabs
 map <S-h> :bprevious<CR>
 map <S-l> :bnext<CR>
+
+" YCM must use the same Python version it's linked against
+let g:ycm_path_to_python_interpreter = '/data/users/tph/fbsource/fbcode/third-party-buck/gcc-5-glibc-2.23/build/python/2.7/bin/python2.7'
