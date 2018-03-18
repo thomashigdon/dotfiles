@@ -6,8 +6,8 @@ export EDITOR="vim"
 set -o vi
 
 function ns {
-  local cur_dir="$HOME/tmp/scratch/current"
-  local new_dir="$HOME/tmp/scratch/$(date +'%s')"
+  cur_dir="$HOME/tmp/scratch/current"
+  new_dir="$HOME/tmp/scratch/$(date +'%s')"
 
   mv "$cur_dir" "$new_dir"
   mkdir -p "$cur_dir"
@@ -19,12 +19,11 @@ function ns {
 
 # autojump
 if [[ $OSTYPE =~ ^darwin ]]; then
-  [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
+  [[ -s "$(brew --prefix)/etc/autojump.sh" ]] && . "$(brew --prefix)/etc/autojump.sh"
   export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:$PATH
   alias airport='sudo /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
   alias ls='gls --color=auto -N'
   alias dircolors='gdircolors'
-  alias vi=vim
 else
   export JAVA_HOME="/usr/local/jdk-8u60-64"
   # linuxbrew
@@ -34,10 +33,12 @@ else
   export PATH="/home/tph/.linuxbrew/bin:$PATH"
 fi
 
+alias vi=nvim
+
 export PATH=$HOME/bin:$HOME/bin/third-party:$HOME/bin/mine:$HOME/third-party/bin:$PATH
-keychain -q $(for x in github; do
+keychain -q "$(for x in github; do
                echo $HOME/.keys/*$x | awk '{print $NF}';
-             done)
+             done)"
 source $HOME/.keychain/$(hostname)-sh
 
 if command -v dircolors >/dev/null 2>&1; then
@@ -163,3 +164,32 @@ export MANPAGER="/bin/sh -c \"unset PAGER;col -b -x | \
     vim -R -c 'set ft=diff nomod nolist' -u ~/.vimrc.more -\""
 unset PAGER
 
+NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
+nv_num=0
+function rv {
+  cur_num=$(tmux display-message -p '#I')
+  if nvr --serverlist | grep $NVIM_LISTEN_ADDRESS > /dev/null; then
+    nvr --remote "$@"
+    if [ "$RV_STAY" != "1" ]; then
+      tmux select-window -t $nv_num
+      tmux set-option remain-on-exit
+    fi 
+  else
+    if tmux select-window -t $nv_num ; then
+      echo "window-selected"
+      sleep 5
+      tmux respawn-window -t $nv_num -k "bash -c 'export NVIM_LISTEN_ADDRESS=$NVIM_LISTEN_ADDRESS ; nvim $*'"
+    else
+      echo "window not-selected"
+      sleep 5
+      tmux new-window -t $nv_num "bash -c 'export NVIM_LISTEN_ADDRESS=$NVIM_LISTEN_ADDRESS ; nvim $*'"
+    fi
+    if [ "$RV_STAY" == "1" ]; then
+      tmux select-window -t "$cur_num"
+    fi
+  fi
+}
+function rvs {
+  local RV_STAY=1
+  rv "$@"
+}

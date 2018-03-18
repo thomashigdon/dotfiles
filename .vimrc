@@ -26,7 +26,7 @@ Plugin 'majutsushi/tagbar'
 Plugin 'benmills/vimux'
 Plugin 'tpope/vim-sleuth'
 Plugin 'rkitover/vimpager'
-Plugin 'jeaye/color_coded'
+"Plugin 'jeaye/color_coded'
 Plugin 'brookhong/cscope.vim'
 Plugin 'jeetsukumaran/vim-buffergator'
 
@@ -37,6 +37,11 @@ endif
 call vundle#end()            " required
 filetype plugin indent on    " required
 
+if filereadable("$ADMIN_SCRIPTS/master.vimrc")
+  source $ADMIN_SCRIPTS/master.vimrc
+else
+  au FileType python setl shiftwidth=4 tabstop=4
+endif
 
 " Highlight search patterns
 set hlsearch
@@ -52,10 +57,6 @@ set foldlevel=1
 "map <S-Enter> O<ESC>
 "map <Enter> o<ESC>
 
-" Ctrl-h and Ctrl-i can move in insert mode
-imap <C-h> <ESC>hi
-imap <C-l> <ESC>li
-
 set scroll=4
 
 " Sensible backspace behavior in insert mode
@@ -68,8 +69,6 @@ set ts=2
 set expandtab
 set shiftwidth=2
 set autoindent
-
-au FileType python setl shiftwidth=4 tabstop=4
 
 " Set windows to not automatically equalize when opening a new one
 set noequalalways
@@ -85,7 +84,7 @@ filetype off
 filetype plugin indent on
 set nocompatible
 
-set t_Co=16
+set t_Co=256
 ""set background=dark
 "let g:solarized_degrade=1
 "let g:solarized_termcolors=16
@@ -109,14 +108,6 @@ set grepprg=grep\ -nH\ $*
 " ignores case unless a capital letter is used in the pattern
 set ignorecase
 set scs
-
-" custom command to open both the .cc and .hh file simultaneously
-" in different panes in a new tab (doesn't work yet)
-:function! Openboth(truncated_name)
-: execute "normal tabnew ".a:truncated_name.cc
-: execute "normal sp ".a:truncated_name.hh
-:endfunction
-:command! -nargs=1 Tboth :call Openboth("<args>")
 
 " Vim will search for the file named 'tags', starting with the
 " current directory and then going to the parent directory and then
@@ -418,3 +409,8 @@ map <S-l> :bnext<CR>
 
 " YCM must use the same Python version it's linked against
 let g:ycm_path_to_python_interpreter = '/data/users/tph/fbsource/fbcode/third-party-buck/gcc-5-glibc-2.23/build/python/2.7/bin/python2.7'
+
+source /home/engshare/admin/scripts/vim/biggrep.vim
+
+let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
+nnoremap <C-w>E :SyntasticToggle<CR>
