@@ -6,17 +6,16 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'Valloric/YouCompleteMe'
+"Plugin 'Valloric/YouCompleteMe'
 Plugin 'rdnetto/YCM-Generator'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'mhinz/vim-signify'
 Plugin 'vim-scripts/genutils'
 Plugin 'scrooloose/nerdtree'
-Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'mbbill/undotree'
 Plugin 'jlanzarotta/bufexplorer'
 Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'vim-syntastic/syntastic'
+"Plugin 'vim-syntastic/syntastic'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'Shougo/unite.vim'
@@ -26,12 +25,36 @@ Plugin 'majutsushi/tagbar'
 Plugin 'benmills/vimux'
 Plugin 'tpope/vim-sleuth'
 Plugin 'rkitover/vimpager'
-"Plugin 'jeaye/color_coded'
 Plugin 'brookhong/cscope.vim'
 Plugin 'jeetsukumaran/vim-buffergator'
+Plugin 'kana/vim-altr'
+Plugin 'octol/vim-cpp-enhanced-highlight'
+" Syntax highlighting
+"Plugin 'bbchung/Clamp'
+Plugin 'nixprime/cpsm'
+Plugin 'tacahiroy/ctrlp-funky'
+let g:ctrlp_funky_syntax_highlight = 1
+nnoremap <leader>f :CtrlPFunky<CR>
+
+"Plugin 'autozimu/LanguageClient-neovim'
+"let g:LanguageClient_serverCommands = {
+"    \ 'cpp' : ['/home/tph/src/cquery/build/release/bin/cquery', '--log-file=/tmp/cq.log', '--init={"cacheDirectory" : "/tmp/cquery"}'],
+"    \ }
+"let g:LanguageClient_loadSettings = 1
+"let g:LanguageClient_settingsPath = '/home/YOUR_USERNAME/.config/nvim/settings.json'
+"set completefunc=LanguageClient#complete
+"set formatexpr=LanguageClient_textDocument_rangeFormatting()
+"
+"nnoremap <silent> gh :call LanguageClient_textDocument_hover()<CR>
+"nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+"nnoremap <silent> gr :call LanguageClient_textDocument_references()<CR>
+"nnoremap <silent> gs :call LanguageClient_textDocument_documentSymbol()<CR>
+"nnoremap <silent> <F3> :call LanguageClient_textDocument_rename()<CR>
+
+Plugin 'lyuts/vim-rtags'
 
 if filereadable("/usr/bin/p4")
-    Plugin 'idbrii/vim-perforce'
+  Plugin 'idbrii/vim-perforce'
 endif
 
 call vundle#end()            " required
@@ -95,7 +118,7 @@ let g:solarized_termtrans=0 " 1|0 background transparent
 let g:solarized_bold=1 " 1|0 show bold fonts
 let g:solarized_italic=1 " 1|0 show italic fonts
 let g:solarized_underline=1 " 1|0 show underlines
-let g:solarized_contrast="normal" " normal|high|low contrast
+let g:solarized_contrast="high" " normal|high|low contrast
 let g:solarized_visibility="normal " " normal|high|low effect on whitespace characters
 set background=dark
 colorscheme solarized
@@ -301,14 +324,17 @@ map <leader>rq :VimuxCloseRunner<CR>
 "python del powerline_setup
 "set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim
 
-let g:signify_vcs_list = [ 'perforce', 'git' ]
-"let g:signify_line_highlight = 1
+let g:signify_vcs_list = [ 'hg', 'git' ]
+let g:signify_line_highlight = 0
 
-"let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = '/home/tph/.vim/bundle/YouCompleteMe/ycm_extra_conf_fbcode.py'
+
 let g:ycm_log_level = 'debug'
 let g:ycm_server_use_vim_stdout = 1
 let g:ycm_server_log_level = 'debug'
 let g:ycm_confirm_extra_conf = 0
+" YCM must use the same Python version it's linked against
+let g:ycm_path_to_python_interpreter = '/home/tph/.linuxbrew/bin/python2.7'
 
 let g:perforce_open_on_change = 1
 
@@ -382,21 +408,23 @@ let g:vim_json_syntax_conceal = 0
 Plugin 'tpope/vim-jdaddy'
 
 " The Silver Searcher
-if executable('ag')
+if executable('')
   " Use ag over grep
   set grepprg=ag\ --nogroup\ --nocolor
 
   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
   " ag is fast enough that CtrlP doesn't need to cache
   let g:ctrlp_use_caching = 1
 endif
 
+let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
+let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+
 "au BufReadPost quickfix map <buffer> <Enter> :.cc<CR>
 nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 " bind \ (backward slash) to grep shortcut
-command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 nnoremap \ :Ag<SPACE>
 
 Plugin 'yssl/QFEnter'
@@ -407,10 +435,12 @@ set hidden
 map <S-h> :bprevious<CR>
 map <S-l> :bnext<CR>
 
-" YCM must use the same Python version it's linked against
-let g:ycm_path_to_python_interpreter = '/data/users/tph/fbsource/fbcode/third-party-buck/gcc-5-glibc-2.23/build/python/2.7/bin/python2.7'
-
-source /home/engshare/admin/scripts/vim/biggrep.vim
+source $HOME/.vim/bundle/biggrep.vim
+nnoremap F :FBGS <C-R><C-W><CR>:cw<CR>
+nnoremap C :CBGS <C-R><C-W><CR>:cw<CR>
+nnoremap T :TBGS <C-R><C-W><CR>:cw<CR>
+nnoremap K :KBGS <C-R><C-W><CR>:cw<CR>
 
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
 nnoremap <C-w>E :SyntasticToggle<CR>
+
