@@ -66,7 +66,22 @@ if [ -f /etc/bash_completion ]; then
     source /etc/bash_completion
 fi
 
-PS1='${debian_chroot:+($debian_chroot)}\u@\h:\d at \t:\w\n\$ '
+function my_prompt {
+# here are a bunch of colors in case
+# you want to get colorful
+local        BLUE="\[\033[0;34m\]"
+local         RED="\[\033[0;31m\]"
+local   LIGHT_RED="\[\033[1;31m\]"
+local       GREEN="\[\033[0;32m\]"
+local LIGHT_GREEN="\[\033[1;32m\]"
+local       WHITE="\[\033[1;37m\]"
+local  LIGHT_GRAY="\[\033[0;37m\]"
+local RESET_COLOR="\[\033[0m\]"
+}
+
+export PS1="${debian_chroot:+($debian_chroot)}\u@\h:\d at \t:\w ${GREEN}""${RESET_COLOR}\n\$ "
+
+my_prompt
 
 function goto_dir()
 {
@@ -176,13 +191,11 @@ function rv {
     fi 
   else
     if tmux select-window -t $nv_num ; then
-      echo "window-selected"
-      sleep 5
       tmux respawn-window -t $nv_num -k "bash -c 'export NVIM_LISTEN_ADDRESS=$NVIM_LISTEN_ADDRESS ; nvim $*'"
+      tmux set-option remain-on-exit
     else
-      echo "window not-selected"
-      sleep 5
       tmux new-window -t $nv_num "bash -c 'export NVIM_LISTEN_ADDRESS=$NVIM_LISTEN_ADDRESS ; nvim $*'"
+      tmux set-option remain-on-exit
     fi
     if [ "$RV_STAY" == "1" ]; then
       tmux select-window -t "$cur_num"
