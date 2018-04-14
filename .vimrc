@@ -410,7 +410,9 @@ map <S-l> :bnext<CR>
 " YCM must use the same Python version it's linked against
 let g:ycm_path_to_python_interpreter = '/data/users/tph/fbsource/fbcode/third-party-buck/gcc-5-glibc-2.23/build/python/2.7/bin/python2.7'
 
-source /home/engshare/admin/scripts/vim/biggrep.vim
+if filereadable("/home/engshare/admin/scripts/vim/biggrep.vim")
+  source /home/engshare/admin/scripts/vim/biggrep.vim
+endif
 
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
 nnoremap <C-w>E :SyntasticToggle<CR>
