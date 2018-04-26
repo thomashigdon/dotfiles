@@ -40,3 +40,5 @@ source $HOME/.zshrc-custom
 
 # Customize to your needs...
 export PATH=$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/local/munki:/opt/local/bin
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

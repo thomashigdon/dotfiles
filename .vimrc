@@ -1,69 +1,127 @@
 set nocompatible              " be iMproved, required
-filetype off                  " required
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+call plug#begin('~/.vim/plugged')
 
-" let Vundle manage Vundle, required
+let mapleader = ","
 
-Plugin 'VundleVim/Vundle.vim'
-"Plugin 'Valloric/YouCompleteMe'
-Plugin 'rdnetto/YCM-Generator'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'mhinz/vim-signify'
-Plugin 'vim-scripts/genutils'
-Plugin 'scrooloose/nerdtree'
-Plugin 'mbbill/undotree'
-Plugin 'jlanzarotta/bufexplorer'
-Plugin 'ctrlpvim/ctrlp.vim'
-"Plugin 'vim-syntastic/syntastic'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'Shougo/unite.vim'
-Plugin 'devjoe/vim-codequery'
-Plugin 'mileszs/ack.vim'
-Plugin 'majutsushi/tagbar'
-Plugin 'benmills/vimux'
-Plugin 'tpope/vim-sleuth'
-Plugin 'rkitover/vimpager'
-Plugin 'brookhong/cscope.vim'
-Plugin 'jeetsukumaran/vim-buffergator'
-Plugin 'kana/vim-altr'
-Plugin 'octol/vim-cpp-enhanced-highlight'
+"Plug 'ervandew/supertab'
+Plug 'easymotion/vim-easymotion'
+Plug 'altercation/vim-colors-solarized'
+Plug 'mhinz/vim-signify'
+Plug 'vim-scripts/genutils'
+Plug 'scrooloose/nerdtree'
+nmap <leader>n :NERDTreeToggle<CR>
+nmap <leader>m :NERDTreeFind<CR>
+Plug 'mbbill/undotree'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'benmills/vimux'
+Plug 'tpope/vim-sleuth'
+Plug 'kana/vim-altr'
+
+Plug 'christoomey/vim-tmux-navigator'
+
+"Plug 'octol/vim-cpp-enhanced-highlight'
 " Syntax highlighting
-"Plugin 'bbchung/Clamp'
-Plugin 'nixprime/cpsm'
-Plugin 'tacahiroy/ctrlp-funky'
-let g:ctrlp_funky_syntax_highlight = 1
-nnoremap <leader>f :CtrlPFunky<CR>
+"Plug 'bbchung/Clamp'
+"Plug 'nixprime/cpsm'
 
-"Plugin 'autozimu/LanguageClient-neovim'
+"Plug 'natebosch/vim-lsc'
+"let g:lsc_server_commands = { 
+"      \'cpp': '/home/tph/src/cquery/build/release/bin/cquery --log-file=/tmp/cq.log --init=''{"cacheDirectory" : "/tmp/cquery-mine"}'''
+"      \ }
+"
+"let g:lsc_auto_map = {
+"    \ 'GoToDefinition': 'gd',
+"    \ 'FindReferences': 'gr',
+"    \ 'NextReference': '<C-n>',
+"    \ 'PreviousReference': '<C-p>',
+"    \ 'FindImplementations': 'gI',
+"    \ 'FindCodeActions': 'ga',
+"    \ 'DocumentSymbol': 'go',
+"    \ 'WorkspaceSymbol': 'gS',
+"    \ 'ShowHover': 'gh',
+"    \ 'Completion': 'completefunc',
+"    \}
+"let g:lsc_trace_level = 'verbose'
+
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'pdavydov108/vim-lsp-cquery'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gD :LspCqueryDerived<CR>
+autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gc :LspCqueryCallers<CR>
+autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gb :LspCqueryBase<CR>
+autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gv :LspCqueryVars<CR>
+autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gd :LspDefinition<CR>
+autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gr :LspReferences<CR>
+autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gh :LspHover<CR>
+let g:lsp_log_verbose = 1
+let g:lsp_log_file = expand('~/vim-lsp.log')
+let g:asyncomplete_log_file = expand('~/vim-asyncomplete.log')
+
+au User lsp_setup call lsp#register_server({
+  \ 'name': 'cquery',
+  \ 'cmd': {server_info->['/home/tph/src/cquery/cquery.real', '--log-file=/tmp/cq.log']},
+  \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
+  \ 'initialization_options': { 'cacheDirectory': '/tmp/cquery-mine', 'cacheFormat' : 'msgpack' },
+  \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+  \ })
+"      \ 'cmd': {server_info->['/bin/cquery', '--log-file=/tmp/cq.log']},
+
+if executable('pyls')
+ au User lsp_setup call lsp#register_server({
+				 \ 'name': 'pyls',
+				 \ 'cmd': {server_info->['pyls', '--log-file=/home/tph/pyls.log']},
+				 \ 'whitelist': ['python'],
+				 \ })
+endif
+
+"Plug 'autozimu/LanguageClient-neovim', {
+" \ 'branch': 'next',
+" \ 'do': 'bash install.sh',
+" \ }
 "let g:LanguageClient_serverCommands = {
-"    \ 'cpp' : ['/home/tph/src/cquery/build/release/bin/cquery', '--log-file=/tmp/cq.log', '--init={"cacheDirectory" : "/tmp/cquery"}'],
+"    \ 'cpp' : ['/home/tph/src/cquery/build/release/bin/cquery', '--log-file=/tmp/cq.log', '--init={"cacheDirectory" : "/tmp/cquery-mine"}'],
+"    \ 'python' : ['pyls', '--log-file=/home/tph/pyls.log'],
 "    \ }
+"
+""    \ 'cpp' : ['/bin/cquery', '--log-file=/tmp/cq.log', '--init={"cacheDirectory" : "/tmp/cquery-fb"}'],
 "let g:LanguageClient_loadSettings = 1
-"let g:LanguageClient_settingsPath = '/home/YOUR_USERNAME/.config/nvim/settings.json'
+"let g:LanguageClient_settingsPath = '/home/tph/.config/nvim/settings.json'
 "set completefunc=LanguageClient#complete
 "set formatexpr=LanguageClient_textDocument_rangeFormatting()
+"
 "
 "nnoremap <silent> gh :call LanguageClient_textDocument_hover()<CR>
 "nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 "nnoremap <silent> gr :call LanguageClient_textDocument_references()<CR>
 "nnoremap <silent> gs :call LanguageClient_textDocument_documentSymbol()<CR>
+"nnoremap <silent> gi :call LanguageClient#textDocument_implementation()<CR>
+"nnoremap <silent> gD :call LanguageClient#cquery_dervied()<CR>
 "nnoremap <silent> <F3> :call LanguageClient_textDocument_rename()<CR>
+"
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+"let $FZF_DEFAULT_COMMAND="fd . 'fbcode/' 'configerator/' 'kernel/' "
+"command! MyShit call fzf#run(fzf#wrap({'source': 'fd-order '.expand('%'), 'sink': 'e'}))
+command! FilesOrdered call fzf#run(fzf#wrap(
+      \ {'source': 'fd-order --infile='.expand('%'), 'options': '--tiebreak=index'}))
+"Plug 'Shougo/deoplete.nvim'
+"uuk
+"let g:deoplete#enable_at_startup = 1
 
-Plugin 'lyuts/vim-rtags'
-
-if filereadable("/usr/bin/p4")
-  Plugin 'idbrii/vim-perforce'
-endif
-
-call vundle#end()            " required
-filetype plugin indent on    " required
+"Plug 'lyuts/vim-rtags'
 
 if filereadable("$ADMIN_SCRIPTS/master.vimrc")
   source $ADMIN_SCRIPTS/master.vimrc
 else
   au FileType python setl shiftwidth=4 tabstop=4
+  " tab stuff (tabs are spaces, tabs are two spaces)
+  set ts=2
+  set expandtab
+  set shiftwidth=2
+  set autoindent
 endif
 
 " Highlight search patterns
@@ -77,8 +135,8 @@ set nofoldenable
 set foldlevel=1
 
 " Insert enter when enter is pressed in command mode
-"map <S-Enter> O<ESC>
-"map <Enter> o<ESC>
+map <S-Enter> O<ESC>
+map <Enter> o<ESC>
 
 set scroll=4
 
@@ -86,12 +144,6 @@ set scroll=4
 set bs=2
 
 set nocp
-
-" tab stuff (tabs are spaces, tabs are two spaces)
-set ts=2
-set expandtab
-set shiftwidth=2
-set autoindent
 
 " Set windows to not automatically equalize when opening a new one
 set noequalalways
@@ -107,7 +159,7 @@ filetype off
 filetype plugin indent on
 set nocompatible
 
-set t_Co=256
+"set t_Co=256
 ""set background=dark
 "let g:solarized_degrade=1
 "let g:solarized_termcolors=16
@@ -152,9 +204,6 @@ endif
 :map <M-Esc>[65~ <S-MouseUp>
 :map! <M-Esc>[65~ <S-MouseUp>
 
-" Open new tab instead of new window
-map <C-W>] <C-W>]:tab split<CR>gT:q<CR>gt
-
 " Set number of lines to scroll with C-d and C-u to a smaller value
 set scroll=8
 
@@ -173,16 +222,16 @@ function! s:Saving_scroll(cmd)
 endfunction
 
 " move and scroll
-nmap <C-J>      :call <SID>Saving_scroll("1<C-V><C-D>")<CR>
-vmap <C-J> <Esc>:call <SID>Saving_scroll("gv1<C-V><C-D>")<CR>
-nmap <C-K>      :call <SID>Saving_scroll("1<C-V><C-U>")<CR>
-vmap <C-K> <Esc>:call <SID>Saving_scroll("gv1<C-V><C-U>")<CR>
+"nmap <C-J>      :call <SID>Saving_scroll("1<C-V><C-D>")<CR>
+"vmap <C-J> <Esc>:call <SID>Saving_scroll("gv1<C-V><C-D>")<CR>
+"nmap <C-K>      :call <SID>Saving_scroll("1<C-V><C-U>")<CR>
+"vmap <C-K> <Esc>:call <SID>Saving_scroll("gv1<C-V><C-U>")<CR>
 
 " set list listchars=trail:_
 " highlight SpecialKey ctermfg=DarkGray ctermbg=yellow
 
 " To use vim as a man pager
-let $PAGER=''
+"let $PAGER=''
 
 let Tlist_Inc_Winwidth=0
 
@@ -191,87 +240,14 @@ let Tlist_Inc_Winwidth=0
 "nnoremap @p4e :!p4 edit %:e
 "nnoremap @p4d :!p4 diff %
 
-" \* does a file search for word under cursor
-" doesn't work currently
-map \* "syiw:Grep^Rs<CR>
-function! Grep(name)
-  let l:pattern = input("Other pttern: ")
-  echo "here"
-  let l:list=system("grep -nIR '".a:name."' * | grep -v 'svn-base' | grep '" .l:pattern. "' | cat -n -")
-  echo "here 2"
-  let l:num=strlen(substitute(l:list, "[^\n]", "", "g"))
-  if l:num < 1
-    echo "'".a:name."' not found"
-    return
-
-  endif
-
-  echo l:list
-  let l:input=input("Which?\n")
-
-  if strlen(l:input)==0
-    return
-  endif
-
-  if strlen(substitute(l:input, "[0-9]", "", "g"))>0
-    echo "Not a number"
-    return
-  endif
-
-  if l:input<1 || l:input>l:num
-    echo "Out of range"
-    return
-  endif
-
-  let l:line=matchstr("\n".l:list, "".l:input."\t[^\n]*")
-  let l:lineno=matchstr(l:line,":[0-9]*:")
-  let l:lineno=substitute(l:lineno,":","","g")
-
-  "echo "".l:line
-  let l:line=substitute(l:line, "^[^\t]*\t", "", "")
-  "echo "".l:line
-  let l:line=substitute(l:line, "\:.*", "", "")
-  echo "".l:line
-  "echo "\n".l:line
-  execute ":e ".l:line
-  execute "normal ".l:lineno."gg"
-
-endfunction
-command! -nargs=1 Grep :call Grep("<args>")
-
-
-" ConqueTerm
-map \s :ConqueTermSplit bash<CR>
-
-" omni completion
-filetype plugin on
-set ofu=syntaxcomplete#Complete
-
 " configure tags - add additional tags here or comment out not-used ones
 set tags+=~/.vim/tags/cpp
 
 " " build tags of your own project with Ctrl-F12
  map <C-F12> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 
-" OmniCppComplete
-let OmniCpp_NamespaceSearch = 1
-let OmniCpp_GlobalScopeSearch = 1
-let OmniCpp_ShowAccess = 1
-let OmniCpp_ShowPrototypeInAbbr = 1 " show function parameters
-let OmniCpp_MayCompleteDot = 1 " autocomplete after .
-let OmniCpp_MayCompleteArrow = 1 " autocomplete after ->
-let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
-let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
-" automatically open and close the popup menu / preview window
-au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-set completeopt=menuone,menu,longest,preview
-
 " man pages
 runtime ftplugin/man.vim
-
-" from http://www.fefe.de/muttfaq/faq.html
-" remove signatures when replying in mutt
-au BufRead /tmp/mutt* normal :g/^> -- $/,/^$/-1d^M/^$^M^L
 
 " Toggle mode allowing x-style pastes in a terminal.
 set pastetoggle=<F2>
@@ -292,8 +268,6 @@ set backspace=indent,eol,start
 set laststatus=2
 set number
 set undofile
-
-let mapleader = ","
 
 nnoremap / /\v
 vnoremap / /\v
@@ -319,22 +293,10 @@ map <leader>rp :VimuxPromptCommand<CR>
 map <leader>rl :VimuxRunLastCommand<CR>
 map <leader>rq :VimuxCloseRunner<CR>
 
-"python from powerline.vim import setup as powerline_setup
-"python powerline_setup()
-"python del powerline_setup
-"set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim
-
 let g:signify_vcs_list = [ 'hg', 'git' ]
 let g:signify_line_highlight = 0
 
 let g:ycm_global_ycm_extra_conf = '/home/tph/.vim/bundle/YouCompleteMe/ycm_extra_conf_fbcode.py'
-
-let g:ycm_log_level = 'debug'
-let g:ycm_server_use_vim_stdout = 1
-let g:ycm_server_log_level = 'debug'
-let g:ycm_confirm_extra_conf = 0
-" YCM must use the same Python version it's linked against
-let g:ycm_path_to_python_interpreter = '/home/tph/.linuxbrew/bin/python2.7'
 
 let g:perforce_open_on_change = 1
 
@@ -370,15 +332,6 @@ let g:airline#extensions#tabline#enabled = 1
 " Use the solarized theme for the Airline status bar
 let g:airline_theme='solarized'
 
-map <Leader>n <plug>NERDTreeTabsToggle<CR>
-map <Leader>m <plug>NERDTreeTabsFind<CR>
-
-"let g:nerdtree_tabs_open_on_console_startup = 1
-map <C-n> :NERDTreeToggle<CR>
-let g:nerdtree_tabs_autofind = 1
-
-nmap <F8> :TagbarToggle<CR>
-
 omap ic <plug>(signify-motion-inner-pending)
 xmap ic <plug>(signify-motion-inner-visual)
 omap ac <plug>(signify-motion-outer-pending)
@@ -391,35 +344,10 @@ autocmd BufEnter *.mcconf :setlocal filetype=python
 autocmd BufEnter *.tw :setlocal filetype=python
 autocmd BufEnter *.materialized_JSON :setlocal filetype=json
 
-" CamelCase and under_score motion
-Plugin 'bkad/CamelCaseMotion'
-map <silent> w <Plug>CamelCaseMotion_w
-map <silent> b <Plug>CamelCaseMotion_b
-map <silent> e <Plug>CamelCaseMotion_e
-map <silent> ge <Plug>CamelCaseMotion_ge
-sunmap w
-sunmap b
-sunmap e
-sunmap ge
-
-Plugin 'elzr/vim-json'
+Plug 'elzr/vim-json'
 let g:vim_json_syntax_conceal = 0
 
-Plugin 'tpope/vim-jdaddy'
-
-" The Silver Searcher
-if executable('')
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
-
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-  " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 1
-endif
-
-let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
-let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+Plug 'tpope/vim-jdaddy'
 
 "au BufReadPost quickfix map <buffer> <Enter> :.cc<CR>
 nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
@@ -427,7 +355,9 @@ nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 nnoremap \ :Ag<SPACE>
 
-Plugin 'yssl/QFEnter'
+Plug 'yssl/QFEnter'
+
+call plug#end()
 
 " tabs/buffers experiment
 set hidden
@@ -435,12 +365,33 @@ set hidden
 map <S-h> :bprevious<CR>
 map <S-l> :bnext<CR>
 
+" Skip quickfix for bnext bprevious
+augroup qf
+    autocmd!
+    autocmd FileType qf set nobuflisted
+augroup END
+
 source $HOME/.vim/bundle/biggrep.vim
-nnoremap F :FBGS <C-R><C-W><CR>:cw<CR>
-nnoremap C :CBGS <C-R><C-W><CR>:cw<CR>
-nnoremap T :TBGS <C-R><C-W><CR>:cw<CR>
-nnoremap K :KBGS <C-R><C-W><CR>:cw<CR>
+nnoremap <leader>F :FBGS <C-R><C-W><CR>:cw<CR>
+nnoremap <leader>C :CBGS <C-R><C-W><CR>:cw<CR>
+nnoremap <leader>T :TBGS <C-R><C-W><CR>:cw<CR>
+nnoremap <leader>K :KBGS <C-R><C-W><CR>:cw<CR>
 
-let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
-nnoremap <C-w>E :SyntasticToggle<CR>
+set path+=/home/tph/fbcode,/home/tph/configerator,/home/tph/kernel,/home/tph/www
 
+nmap <leader>f :FilesOrdered<cr>
+nmap <leader>b :Buffers<cr>
+nmap <leader>h :History<cr>
+
+" copy the current text selection to the system clipboard
+if has('gui_running') || has('nvim') && exists('$DISPLAY')
+  noremap <Leader>y "+y
+else
+  " copy to attached terminal using the yank(1) script:
+  noremap <silent> <Leader>y y:call system('yank > /dev/tty', @0)<Return>
+endif
+
+" altr plugin (for alternate buffers)
+nmap <leader>a <Plug>(altr-forward)
+nmap <leader>s <Plug>(altr-back)
+call altr#define('%.h', '%.cpp', '%-inl.h')
