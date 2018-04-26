@@ -371,17 +371,15 @@ augroup qf
     autocmd FileType qf set nobuflisted
 augroup END
 
-source $HOME/.vim/bundle/biggrep.vim
-nnoremap <leader>F :FBGS <C-R><C-W><CR>:cw<CR>
-nnoremap <leader>C :CBGS <C-R><C-W><CR>:cw<CR>
-nnoremap <leader>T :TBGS <C-R><C-W><CR>:cw<CR>
-nnoremap <leader>K :KBGS <C-R><C-W><CR>:cw<CR>
-
 set path+=/home/tph/fbcode,/home/tph/configerator,/home/tph/kernel,/home/tph/www
 
 nmap <leader>f :FilesOrdered<cr>
 nmap <leader>b :Buffers<cr>
 nmap <leader>h :History<cr>
+
+if filereadable("$HOME/.vim/bundle/biggrep.vim")
+  source $HOME/.vim/bundle/biggrep.vim
+endif
 
 " copy the current text selection to the system clipboard
 if has('gui_running') || has('nvim') && exists('$DISPLAY')

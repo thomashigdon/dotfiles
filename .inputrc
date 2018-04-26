@@ -1,6 +1,7 @@
 set keymap vi-insert
 "\C-p": history-search-backward
 "\C-n": history-search-forward
+RETURN: "\e\n"
 set editing-mode vi
 set keymap vi-command
 set show-mode-in-prompt on
