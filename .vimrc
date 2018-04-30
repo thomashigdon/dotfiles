@@ -369,11 +369,20 @@ augroup qf
     autocmd FileType qf set nobuflisted
 augroup END
 
+source $HOME/.vim/bundle/biggrep.vim
+nnoremap <leader>F :FBGS <C-R><C-W><CR>:cw<CR>
+nnoremap <leader>C :CBGS <C-R><C-W><CR>:cw<CR>
+nnoremap <leader>T :TBGS <C-R><C-W><CR>:cw<CR>
+nnoremap <leader>K :KBGS <C-R><C-W><CR>:cw<CR>
+
 set path+=/home/tph/fbcode,/home/tph/configerator,/home/tph/kernel,/home/tph/www
 
 nmap <leader>f :FilesOrdered<cr>
 nmap <leader>b :Buffers<cr>
 nmap <leader>h :History<cr>
+
+" YCM must use the same Python version it's linked against
+let g:ycm_path_to_python_interpreter = '/data/users/tph/fbsource/fbcode/third-party-buck/gcc-5-glibc-2.23/build/python/2.7/bin/python2.7'
 
 if filereadable("$HOME/.vim/bundle/biggrep.vim")
   source $HOME/.vim/bundle/biggrep.vim
