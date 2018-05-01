@@ -1,9 +1,9 @@
 set nocompatible              " be iMproved, required
-call plug#begin('~/.vim/plugged')
-
 let mapleader = ","
 
 "Plug 'ervandew/supertab'
+call plug#begin('~/.vim/plugged')
+
 Plug 'easymotion/vim-easymotion'
 Plug 'altercation/vim-colors-solarized'
 Plug 'mhinz/vim-signify'
@@ -160,7 +160,7 @@ filetype plugin indent on
 set nocompatible
 
 "set t_Co=256
-""set background=dark
+"set background=dark
 "let g:solarized_degrade=1
 "let g:solarized_termcolors=16
 let g:solarized_termtrans = 1
@@ -173,7 +173,6 @@ let g:solarized_underline=1 " 1|0 show underlines
 let g:solarized_contrast="high" " normal|high|low contrast
 let g:solarized_visibility="normal " " normal|high|low effect on whitespace characters
 set background=dark
-colorscheme solarized
 
 autocmd Syntax * syn match ExtraWhitespace /\s\+$/
 
@@ -356,7 +355,6 @@ command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 nnoremap \ :Ag<SPACE>
 
 Plug 'yssl/QFEnter'
-
 call plug#end()
 
 " tabs/buffers experiment
@@ -402,3 +400,4 @@ endif
 nmap <leader>a <Plug>(altr-forward)
 nmap <leader>s <Plug>(altr-back)
 call altr#define('%.h', '%.cpp', '%-inl.h')
+colorscheme solarized
