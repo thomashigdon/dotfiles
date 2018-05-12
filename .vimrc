@@ -388,13 +388,8 @@ if filereadable("$HOME/.vim/bundle/biggrep.vim")
   source $HOME/.vim/bundle/biggrep.vim
 endif
 
-" copy the current text selection to the system clipboard
-if has('gui_running') || has('nvim') && exists('$DISPLAY')
-  noremap <Leader>y "+y
-else
-  " copy to attached terminal using the yank(1) script:
-  noremap <silent> <Leader>y y:call system('yank > /dev/tty', @0)<Return>
-endif
+" copy to attached terminal using the yank(1) script:
+noremap <silent> <Leader>y :call system("cat", getreg("\""), "|", "rpbcopy")<Return>
 
 " altr plugin (for alternate buffers)
 nmap <leader>a <Plug>(altr-forward)
