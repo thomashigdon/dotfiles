@@ -388,7 +388,7 @@ if filereadable("$HOME/.vim/bundle/biggrep.vim")
 endif
 
 " copy to attached terminal using the yank(1) script:
-noremap <silent> <Leader>y :call system("cat", getreg("\""), "|", "rpbcopy")<Return>
+noremap <silent> y y:call system("echo -n " . getreg("\"") . " \| rpbcopy")<Return>
 
 " altr plugin (for alternate buffers)
 nmap <leader>a <Plug>(altr-forward)
