@@ -369,7 +369,6 @@ augroup qf
     autocmd FileType qf set nobuflisted
 augroup END
 
-source $HOME/.vim/bundle/biggrep.vim
 nnoremap <leader>F :FBGS <C-R><C-W><CR>:cw<CR>
 nnoremap <leader>C :CBGS <C-R><C-W><CR>:cw<CR>
 nnoremap <leader>T :TBGS <C-R><C-W><CR>:cw<CR>

@@ -1,6 +1,6 @@
 
 # Environment
-export EDITOR="vim"
+export EDITOR="nvim"
 export PATH=$HOME/bin:$HOME/bin/third-party:$HOME/bin/mine:$HOME/third-party/bin:$PATH
 
 ###
