@@ -369,7 +369,6 @@ augroup qf
     autocmd FileType qf set nobuflisted
 augroup END
 
-source $HOME/.vim/bundle/biggrep.vim
 nnoremap <leader>F :FBGS <C-R><C-W><CR>:cw<CR>
 nnoremap <leader>C :CBGS <C-R><C-W><CR>:cw<CR>
 nnoremap <leader>T :TBGS <C-R><C-W><CR>:cw<CR>
@@ -388,13 +387,8 @@ if filereadable("$HOME/.vim/bundle/biggrep.vim")
   source $HOME/.vim/bundle/biggrep.vim
 endif
 
-" copy the current text selection to the system clipboard
-if has('gui_running') || has('nvim') && exists('$DISPLAY')
-  noremap <Leader>y "+y
-else
-  " copy to attached terminal using the yank(1) script:
-  noremap <silent> <Leader>y y:call system('yank > /dev/tty', @0)<Return>
-endif
+" copy to attached terminal using the yank(1) script:
+noremap <silent> y y:call system("echo -n " . getreg("\"") . " \| rpbcopy")<Return>
 
 " altr plugin (for alternate buffers)
 nmap <leader>a <Plug>(altr-forward)
