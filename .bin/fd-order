@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+
+from __future__ import print_function
+import os
+import sys
+import argparse
+import subprocess
+
+CONFIGURED_DIRS = [
+        "fbcode",
+        "configerator",
+        "kernel",
+]
+CONFIGURED_DIRS = [os.path.realpath(os.path.join(os.environ['HOME'], x))
+                   for x in CONFIGURED_DIRS]
+
+def is_member(dir, file):
+    return os.path.commonpath([dir, file]) == dir
+
+def call_fd(dir, argv):
+    #print(["fd", ".*", dir, '--type=f'] + argv, file=sys.stderr)
+    subprocess.run(["fd", ".*", dir, '--type=f'] + argv)
+
+def relpath(dir1, dir2):
+    #import ipdb; ipdb.set_trace()
+    common = os.path.commonpath([dir1, dir2])
+    return os.path.relpath(dir1, start=common)
+
+
+def main(arguments):
+    parser = argparse.ArgumentParser(description=__doc__,
+            formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--infile', help="current file")
+    args = parser.parse_args(arguments)
+    if not args.infile:
+        for dir in set(CONFIGURED_DIRS):
+            call_fd(dir, arguments[1:])
+        return 0
+
+    args.infile = os.path.realpath(args.infile)
+    initial_dir = os.path.dirname(args.infile)
+
+    for dir in CONFIGURED_DIRS:
+        if is_member(dir, initial_dir):
+            break
+    else:
+        for dir in CONFIGURED_DIRS:
+            call_fd(dir, arguments[1:])
+        return 0
+
+    cur_dir = initial_dir
+    last_dir = args.infile
+    while len(cur_dir) >= len(dir):
+        call_fd(cur_dir, arguments[1:] +
+                         ["--exclude", relpath(last_dir, cur_dir)])
+        last_dir = cur_dir
+        cur_dir = os.path.dirname(cur_dir)
+
+    for dir in set(CONFIGURED_DIRS) - set([dir]):
+        call_fd(dir, arguments[1:])
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv[1:]))

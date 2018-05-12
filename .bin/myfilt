@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+import re
+import copy
+
+lines = set()
+for line in sys.stdin.readlines():
+  lines.add(line)
+
+if len(sys.argv) < 2:
+  print("".join(lines))
+  sys.exit(0)
+
+sortedlines = []
+file = sys.argv[1]
+filedir = os.path.dirname(file)
+
+
+filedir = os.path.abspath(os.path.realpath(filedir))
+sizecomp = filedir.count('/')
+
+while sizecomp >= 0:
+  linesubset = []
+  for line in copy.deepcopy(lines):
+    match = re.search("^([^:]+):", line)
+    if not match: continue
+    linefile = match.group(1)
+    linedir = os.path.abspath(os.path.realpath(os.path.dirname(linefile)))
+    common = os.path.commonpath([linedir, filedir])
+    commonsize = common.count('/')
+    if commonsize >= sizecomp:
+      linesubset.append(line)
+      lines.remove(line)
+  sortedlines += sorted(linesubset)
+  sizecomp -= 1
+
+sortedlines += sorted(list(lines))
+
+print("".join(sortedlines))
