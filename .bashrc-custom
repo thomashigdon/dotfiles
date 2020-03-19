@@ -1,4 +1,6 @@
 
+if [ -n "$TMUX" ]; then echo in tmux; fi
+
 # Environment
 export EDITOR="nvim"
 export PATH=$HOME/bin:$HOME/bin/third-party:$HOME/bin/mine:$HOME/third-party/bin:$PATH
@@ -11,9 +13,7 @@ export LANG=en_US.UTF-8
 export LC_TYPE=en_US.UTF-8
 
 export PATH=$HOME/.bin:$PATH
-if [[ $OSTYPE =~ ^darwin ]]; then
-  export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:$PATH
-else
+if ! [[ $OSTYPE =~ ^darwin ]]; then
   export JAVA_HOME="/usr/local/jdk-8u60-64"
   # linuxbrew
   export PATH="/home/tph/.linuxbrew/bin:$PATH"

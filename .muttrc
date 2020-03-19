@@ -1,9 +1,9 @@
 set mbox_type=Maildir
 
-set folder="$HOME/Akamai-Mail/"
-set mask="!&\\[^.]"
-set mbox=$HOME/Akamai-Mail/
-set spoolfile="$HOME/Akamai-Mail/INBOX/"
+#set folder="$HOME/FB-Mail/"
+#set mask="!&\\[^.]"
+#set mbox=$HOME/FB-Mail/
+#set spoolfile="$HOME/FB-Mail/INBOX/"
 #mailboxes ! + `\
 #for file in ~/Akamai-Mail/.*; do \
 #  box=$(basename "$file"); \
@@ -12,24 +12,37 @@ set spoolfile="$HOME/Akamai-Mail/INBOX/"
 #   echo -n "\"+$box\" "; \
 #  fi; \
 #done`
-source ~/.mutt/mailboxes
+#source ~/.mutt/mailboxes
+set imap_user = 'tph@fb.com'
+set spoolfile = imaps://outlook.office365.com/INBOX
+set folder = imaps://outlook.office365.com/
+set record="imaps://outlook.office365.com/[FB]/Sent Mail"
+set postponed="imaps://outlook.office365.com/[FB]/Drafts"
+set mbox="imaps://outlook.office365.com/[FB]/All Mail"
 
 #mailboxes ="imaps://thigdon@exchange.kendall.corp.akamai.com/Inbox"
 
 #set folder="imaps://thigdon@exchange.kendall.corp.akamai.com"
 #set spoolfile="imaps://thigdon@exchange.kendall.corp.akamai.com/Inbox"
 set realname="Thomas Higdon"
+set from = "tph@fb.com"
+set use_from = yes
 set mime_forward = yes
+unset use_domain
 
 macro index c "<change-folder>?<toggle-mailboxes>" "open a different folder"
 macro pager c "<change-folder>?<toggle-mailboxes>" "open a different folder"
+
+set smtp_url = "smtp://tph@fb.com@outlook.office365.com:587/"
+set ssl_force_tls = yes
+set smtp_authenticators = "login"
 
 unignore date
 set move=no
 set header_cache=~/.mutt-cache
 set message_cachedir=~/.mutt-cache
-set record=+"Sent Items"
-set postponed=+"Drafts"
+#set record=+"Sent Items"
+#set postponed=+"Drafts"
 set trash=+"Deleted Items"
 set imap_check_subscribed
 set mail_check=60

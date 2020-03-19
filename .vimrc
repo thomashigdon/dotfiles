@@ -17,6 +17,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'benmills/vimux'
 Plug 'tpope/vim-sleuth'
 Plug 'kana/vim-altr'
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 
 Plug 'christoomey/vim-tmux-navigator'
 
@@ -107,6 +108,8 @@ Plug 'junegunn/fzf.vim'
 "command! MyShit call fzf#run(fzf#wrap({'source': 'fd-order '.expand('%'), 'sink': 'e'}))
 command! FilesOrdered call fzf#run(fzf#wrap(
       \ {'source': 'fd-order --infile='.expand('%'), 'options': '--tiebreak=index'}))
+command! FilesOrderedRefresh call fzf#run(fzf#wrap(
+      \ {'source': 'fd-order --force-refresh --infile='.expand('%'), 'options': '--tiebreak=index'}))
 "Plug 'Shougo/deoplete.nvim'
 "uuk
 "let g:deoplete#enable_at_startup = 1
@@ -377,6 +380,7 @@ nnoremap <leader>K :KBGS <C-R><C-W><CR>:cw<CR>
 set path+=/home/tph/fbcode,/home/tph/configerator,/home/tph/kernel,/home/tph/www
 
 nmap <leader>f :FilesOrdered<cr>
+nmap <leader>g :FilesOrdered<cr>
 nmap <leader>b :Buffers<cr>
 nmap <leader>h :History<cr>
 
@@ -388,7 +392,7 @@ if filereadable("$HOME/.vim/bundle/biggrep.vim")
 endif
 
 " copy to attached terminal using the yank(1) script:
-noremap <silent> y y:call system("echo -n " . getreg("\"") . " \| rpbcopy")<Return>
+"noremap <silent> y y:call system("echo -n " . getreg("\"") . " \| rpbcopy")<Return>
 
 " altr plugin (for alternate buffers)
 nmap <leader>a <Plug>(altr-forward)

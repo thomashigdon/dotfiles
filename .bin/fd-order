@@ -1,63 +1,140 @@
 #!/usr/bin/env python3
 
 from __future__ import print_function
+import sys
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+
 import os
 import sys
 import argparse
 import subprocess
+import hashlib
+import time
 
 CONFIGURED_DIRS = [
-        "fbcode",
-        "configerator",
-        "kernel",
+        "fbsource/fbcode",
+        "fbsource/xplat",
+#        "configerator",
+#        "linux",
+#        "opsfiles",
+#        "www-hg",
+        "fbsource/fbobjc",
+#        "fbsource/fbandroid",
+#        "fbsource2/xplat",
 ]
-CONFIGURED_DIRS = [os.path.realpath(os.path.join(os.environ['HOME'], x))
-                   for x in CONFIGURED_DIRS]
+
+BASE_DIR = '{}'.format(os.environ['HOME'])
+CACHE_DIR = os.path.join(BASE_DIR, '.cache/fd-order')
+CACHE_FILE = os.path.join(CACHE_DIR, 'fd-order.cache')
+REFRESH_TIME = 24 * 60 * 60
 
 def is_member(dir, file):
     return os.path.commonpath([dir, file]) == dir
 
+def hash_cmd(cmd, force_refresh=False):
+    hashed_cmd = hashlib.md5(cmd.encode('utf-8')).hexdigest()
+    cache_file = os.path.join(CACHE_DIR, hashed_cmd)
+    try:
+        age = os.path.getmtime(cache_file)
+        if not force_refresh and time.time() < age + REFRESH_TIME:
+            cmd = 'cat {}'.format(cache_file)
+        else:
+            raise Exception()
+
+    except Exception:
+        cmd = '{} | tee {} 2>/dev/null'.format(cmd, cache_file)
+
+    return cmd
+
+def rg(dir, exclude=None, is_file=False, force_refresh=False):
+    exclude_str = ""
+    cmd = 'rg --files {}'.format(dir)
+    if exclude:
+        cmd = '{} | grep -v {}/{}'.format(cmd, dir, exclude)
+    cmd = hash_cmd(cmd, force_refresh=force_refresh)
+    return cmd
+
 def call_fd(dir, argv):
-    #print(["fd", ".*", dir, '--type=f'] + argv, file=sys.stderr)
-    subprocess.run(["fd", ".*", dir, '--type=f'] + argv)
+    print(["fd", ".*", dir, '--type=f'] + argv, file=sys.stderr)
+    subprocess.Popen(["rg", "--files", dir] + argv,
+       stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+
+def execute_cmds():
+    new_cmds = []
+    full_cmd = ""
+    for cmd in cmds:
+        if type(cmd) == list:
+            full_cmd += ("({});".format(";".join(cmd)))
+        else:
+            full_cmd += "{} & ".format(cmd)
+    full_cmd = "mkdir -p {}; ({});".format(CACHE_DIR, full_cmd)
+    #full_cmd = "{}; wait".format(full_cmd)
+    #print(full_cmd)
+    #subprocess.run(full_cmd, shell=True, stderr=subprocess.DEVNULL, preexec_fn=os.setpgrp)
+    ret = os.fork()
+    if ret == 0:
+        # Don't let someone kill this process
+        os.setpgrp()
+        os.system(full_cmd)
 
 def relpath(dir1, dir2):
-    #import ipdb; ipdb.set_trace()
     common = os.path.commonpath([dir1, dir2])
     return os.path.relpath(dir1, start=common)
 
+cmds = []
 
 def main(arguments):
     parser = argparse.ArgumentParser(description=__doc__,
             formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--infile', help="current file")
+    parser.add_argument('--force-refresh', help="use cached data", action='store_true')
     args = parser.parse_args(arguments)
+
+    os.chdir(BASE_DIR)
+    global CONFIGURED_DIRS
+    CONFIGURED_DIRS = [os.path.join(BASE_DIR, dir) for dir in CONFIGURED_DIRS]
     if not args.infile:
-        for dir in set(CONFIGURED_DIRS):
-            call_fd(dir, arguments[1:])
+        for dir in CONFIGURED_DIRS:
+            cmds.append(rg(dir, arguments[1:], force_refresh=args.force_refresh))
+        execute_cmds()
         return 0
 
+    #if args.infile.startswith(BASE_DIR):
+    #    args.infile = args.infile[len(BASE_DIR)+1:]
     args.infile = os.path.realpath(args.infile)
     initial_dir = os.path.dirname(args.infile)
+
 
     for dir in CONFIGURED_DIRS:
         if is_member(dir, initial_dir):
             break
     else:
         for dir in CONFIGURED_DIRS:
-            call_fd(dir, arguments[1:])
+            cmds.append(rg(dir, arguments[1:], force_refresh=args.force_refresh))
+        execute_cmds()
         return 0
 
     cur_dir = initial_dir
-    last_dir = args.infile
+    last_dir = None
+    if os.path.exists(args.infile):
+        last_dir = args.infile
+    is_file = True
+    cmds.append([])
     while len(cur_dir) >= len(dir):
-        call_fd(cur_dir, arguments[1:] +
-                         ["--exclude", relpath(last_dir, cur_dir)])
+        if len(cur_dir) == len(dir):
+            cmds.append(rg(cur_dir, exclude=relpath(last_dir, cur_dir), is_file=True, force_refresh=args.force_refresh))
+        else:
+            cmds[0].append(rg(cur_dir, exclude=relpath(last_dir, cur_dir), is_file=True, force_refresh=args.force_refresh))
         last_dir = cur_dir
         cur_dir = os.path.dirname(cur_dir)
+        is_file = False
 
-    for dir in set(CONFIGURED_DIRS) - set([dir]):
-        call_fd(dir, arguments[1:])
+    remaining_dirs = [x for x in CONFIGURED_DIRS if x != dir]
+    for dir in remaining_dirs:
+        cmds.append(rg(dir, force_refresh=args.force_refresh))
+    execute_cmds()
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))

@@ -34,9 +34,6 @@ shopt -s checkwinsize
 
 unset USERNAME
 
-if [ -f ~/.bashrc-custom ]; then
-	source ~/.bashrc-custom
-fi
 if [ -f ~/.bashrc-fb ]; then
 	source ~/.bashrc-fb
 fi
@@ -77,9 +74,9 @@ grep1() { awk -v pattern="${1:?pattern is empty}" 'NR==1 || $0~pattern' "${2:?fi
 
 
 # Startup stuff
-keychain -q "$(for x in github; do
-               echo $HOME/.keys/*$x | awk '{print $NF}';
-             done)"
+#keychain -q "$(for x in github; do
+#               echo $HOME/.keys/*$x | awk '{print $NF}';
+#             done)"
 source $HOME/.keychain/$(hostname)-sh
 
 if command -v dircolors >/dev/null 2>&1; then
@@ -236,3 +233,5 @@ function h2d {
 }
 
 [[ -s "$HOME/.local/share/marker/marker.sh" ]] && source "$HOME/.local/share/marker/marker.sh"
+
+export PATH="$HOME/.cargo/bin:$PATH"
