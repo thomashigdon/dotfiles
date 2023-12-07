@@ -4,6 +4,8 @@ if [ -n "$TMUX" ]; then echo in tmux; fi
 # Environment
 export EDITOR="nvim"
 export PATH=$HOME/bin:$HOME/bin/third-party:$HOME/bin/mine:$HOME/third-party/bin:$HOME/.bin:$PATH
+# This used to allow urlview to work. It runs $BROWSER on the resulting URL, and this will make it hit the clipboard instead.
+export BROWSER=yank2
 
 ###
 
@@ -13,11 +15,34 @@ export LANG=en_US.UTF-8
 export LC_TYPE=en_US.UTF-8
 
 export PATH=$HOME/.bin:$PATH
-if ! [[ $OSTYPE =~ ^darwin ]]; then
+if [[ $OSTYPE =~ ^darwin ]]; then
   export JAVA_HOME="/usr/local/jdk-8u60-64"
+  export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:$PATH
+else
+  true
   # linuxbrew
-  export PATH="/home/tph/.linuxbrew/bin:$PATH"
-  export MANPATH="/home/tph/.linuxbrew/share/man:$MANPATH"
-  export INFOPATH="/home/tph/.linuxbrew/share/info:$INFOPATH"
-  export PATH="/home/tph/.linuxbrew/bin:$PATH"
+  #export PATH="/home/tph/.linuxbrew/bin:$PATH"
+  #export MANPATH="/home/tph/.linuxbrew/share/man:$MANPATH"
+  #export INFOPATH="/home/tph/.linuxbrew/share/info:$INFOPATH"
+  #export PATH="/home/tph/.linuxbrew/bin:$PATH"
 fi
+
+function gmtime {
+  date -d"@$1"
+  TZ=ET date -d"@$1"
+  date -u -d"@$1"
+}
+
+function h2d {
+  echo $((16#$1))
+}
+
+function d2h {
+  echo "obase=16; $1" | bc
+}
+
+function hgrep() {
+  sed -n "1p;/$@/p"
+}
+
+. /home/tph/.linuxbrew/etc/profile.d/piknik.sh

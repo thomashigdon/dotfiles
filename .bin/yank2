@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+#set -eu
 
 is_app_installed() {
   type "$1" &>/dev/null
@@ -64,7 +64,4 @@ esc="\033Ptmux;\033$esc\033\\"
 pane_active_tty=$(tmux list-panes -F "#{pane_active} #{pane_tty}" | awk '$1=="1" { print $2 }')
 target_tty="${SSH_TTY:-$pane_active_tty}"
 
-echo $esc
-echo $target_tty
-echo $pane_active_tty
-printf "$esc" > "$target_tty"
+printf "$esc" > $(cat $HOME/.current-terminal)

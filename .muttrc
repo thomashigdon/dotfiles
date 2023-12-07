@@ -33,9 +33,8 @@ unset use_domain
 macro index c "<change-folder>?<toggle-mailboxes>" "open a different folder"
 macro pager c "<change-folder>?<toggle-mailboxes>" "open a different folder"
 
-set smtp_url = "smtp://tph@fb.com@outlook.office365.com:587/"
+set smtp_url = "smtp://tph@smtp.office365.com"
 set ssl_force_tls = yes
-set smtp_authenticators = "login"
 
 unignore date
 set move=no

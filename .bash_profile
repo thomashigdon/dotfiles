@@ -2,7 +2,7 @@
 #    return
 #fi
 
-BASH_BIN="$HOME/.linuxbrew/bin/bash"
+#BASH_BIN="$HOME/.linuxbrew/bin/bash"
 
 # The replacement is only done in non-bash login interactive shell in
 # SSH connection and bash executable exists.
@@ -112,8 +112,6 @@ local  LIGHT_GRAY="\[\033[0;37m\]"
 local RESET_COLOR="\[\033[0m\]"
 }
 
-export PS1="${debian_chroot:+($debian_chroot)}\u@\h:\d at \t:\w ${GREEN}""${RESET_COLOR}\n\$ "
-
 my_prompt
 
 function goto_dir()
@@ -152,28 +150,29 @@ function update_title {
 }
 
 # Update tmux window titles when command is executed
-case ${TERM} in
+#case ${TERM} in
+#
+#    screen*)
+#
+#        # user command to change default pane title on demand
+#        function title { TMUX_PANE_TITLE="$*"; }
+#
+#        # function that performs the title update (invoked as PROMPT_COMMAND)
+#        function update_title { printf "\033]2;%s\033\\" "${1:-$TMUX_PANE_TITLE}"; }
+#
+#        # default pane title is the name of the current process (i.e. 'bash')
+#        TMUX_PANE_TITLE=$(ps -o comm $$ | tail -1)
+#
+#        # Reset title to the default before displaying the command prompt
+#        PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND }'update_title'   
+#
+#        # Update title before executing a command: set it to the command
+#        trap 'update_title "$BASH_COMMAND"' DEBUG
+#
+#        ;;
+#
+#esac
 
-    screen*)
-
-        # user command to change default pane title on demand
-        function title { TMUX_PANE_TITLE="$*"; }
-
-        # function that performs the title update (invoked as PROMPT_COMMAND)
-        function update_title { printf "\033]2;%s\033\\" "${1:-$TMUX_PANE_TITLE}"; }
-
-        # default pane title is the name of the current process (i.e. 'bash')
-        TMUX_PANE_TITLE=$(ps -o comm $$ | tail -1)
-
-        # Reset title to the default before displaying the command prompt
-        PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND }'update_title'   
-
-        # Update title before executing a command: set it to the command
-        trap 'update_title "$BASH_COMMAND"' DEBUG
-
-        ;;
-
-esac
 
 export WILDFLY_HOME=/usr/local/wildfly/current
 export JBOSS_HOME=${WILDFLY_HOME}
@@ -199,6 +198,47 @@ export HISTFILE=~/.bash_eternal_history
 # http://superuser.com/questions/20900/bash-history-loss
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'} history -a; history -c; history -r"
+
+# Show current hg bookmark
+function hgproml {
+  # here are a bunch of colors in case
+  # you want to get colorful
+  local        BLUE="\[\033[0;34m\]"
+  local         RED="\[\033[0;31m\]"
+  local   LIGHT_RED="\[\033[1;31m\]"
+  local       GREEN="\[\033[0;32m\]"
+  local LIGHT_GREEN="\[\033[1;32m\]"
+  local       WHITE="\[\033[1;37m\]"
+  local  LIGHT_GRAY="\[\033[0;37m\]"
+  local RESET_COLOR="\[\033[0m\]"
+
+export PS1="${WHITE}\h ${BLUE}\D{%F}@${LIGHT_GREEN}\D{%T}${GREEN}\$(parse_hg_branch) ${LIGHT_RED}\w""${RESET_COLOR}\n\$ "
+PS2='> '
+PS4='+ '
+}
+
+hgproml
+
+PS1_ORIG=$PS1
+
+update_exit_code() {
+    local EXIT="$?"             # This needs to be first
+
+    local RCol='\[\e[0m\]'
+
+    local Red='\[\e[0;31m\]'
+    local Gre='\[\e[0;32m\]'
+    local BYel='\[\e[1;33m\]'
+    local BBlu='\[\e[1;34m\]'
+    local Pur='\[\e[0;35m\]'
+
+    if [ $EXIT != 0 ]; then
+        PS1="${Red}[Exit: $EXIT]${RCol}\n$PS1_ORIG"      # Add red if exit code non 0
+    else
+        PS1="$PS1_ORIG" 
+    fi
+}
+#PROMPT_COMMAND=" update_exit_code; ${PROMPT_COMMAND}"
 
 powerline-daemon -q
 

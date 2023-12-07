@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+
 from __future__ import print_function
 import sys
 
@@ -14,18 +15,19 @@ import hashlib
 import time
 
 CONFIGURED_DIRS = [
-#        "fbsource/fbcode",
+        "fbsource/fbcode",
         "fbsource/xplat",
-#        "configerator",
-#        "linux",
-#        "opsfiles",
-#        "www-hg",
-        "fbsource/fbobjc",
+        "configerator",
+        "linux",
+        "opsfiles",
+        "www-hg",
+        "instagram-server",
+#        "fbsource/fbobjc",
 #        "fbsource/fbandroid",
 #        "fbsource2/xplat",
 ]
 
-BASE_DIR = '{}'.format(os.environ['HOME'])
+BASE_DIR = '/data/users/{}'.format(os.environ['USER'])
 CACHE_DIR = os.path.join(BASE_DIR, '.cache/fd-order')
 CACHE_FILE = os.path.join(CACHE_DIR, 'fd-order.cache')
 REFRESH_TIME = 24 * 60 * 60

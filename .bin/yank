@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 #
 # Usage: yank [FILE...]
 #
@@ -27,10 +27,6 @@ buf=$( cat "$@" )
 
 # copy to tmux if possible
 test -n "$TMUX" && tmux set-buffer "$buf"
-
-if [ -x "$(which rpbcopy)" ]; then
-  echo -n $buf | rpbcopy
-fi
 
 # copy to X11 if possible...
 test -n "$DISPLAY" && printf %s "$buf" | { xsel -ib || xclip -sel c ;} && exit

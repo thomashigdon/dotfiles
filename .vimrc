@@ -7,6 +7,9 @@ call plug#begin('~/.vim/plugged')
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'easymotion/vim-easymotion'
 Plug 'altercation/vim-colors-solarized'
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'easymotion/vim-easymotion'
+"Plug 'altercation/vim-colors-solarized'
 "Plug 'mhinz/vim-signify'
 "Plug 'vim-scripts/genutils'
 Plug 'scrooloose/nerdtree'
@@ -16,13 +19,21 @@ nmap <leader>m :NERDTreeFind<CR>
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-obsession'
+Plug '/usr/share/fb-editor-support/nvim'
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'dr-kino/cscope-maps'
 "Plug 'benmills/vimux'
 "Plug 'tpope/vim-sleuth'
 Plug 'kana/vim-altr'
 "Plug 'tpope/vim-abolish'
 Plug 'phleet/vim-mercenary'
+Plug 'dense-analysis/ale'
 
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'tpope/vim-fugitive'
 "
 ""Plug 'octol/vim-cpp-enhanced-highlight'
 "" Syntax highlighting
@@ -48,18 +59,19 @@ Plug 'christoomey/vim-tmux-navigator'
 ""    \}
 ""let g:lsc_trace_level = 'verbose'
 "
-"Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
-"Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'pdavydov108/vim-lsp-cquery'
-autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gD :LspCqueryDerived<CR>
-autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gc :LspCqueryCallers<CR>
-autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gb :LspCqueryBase<CR>
-autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gv :LspCqueryVars<CR>
-autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gd :LspDefinition<CR>
-autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gr :LspReferences<CR>
-autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gh :LspHover<CR>
+"autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gD :LspCqueryDerived<CR>
+"autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gc :LspCqueryCallers<CR>
+"autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gb :LspCqueryBase<CR>
+"autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gv :LspCqueryVars<CR>
+"autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gd :LspDefinition<CR>
+"autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gr :LspReferences<CR>
+"autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gh :LspHover<CR>
+
 let g:lsp_log_verbose = 1
 let g:lsp_log_file = expand('~/vim-lsp.log')
 let g:asyncomplete_log_file = expand('~/vim-asyncomplete.log')
@@ -236,7 +248,7 @@ let &previewheight = 5
 
 Plug 'junegunn/fzf'
 
-Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf.vim', { 'do': { -> fzf#install() } }
 "let $FZF_DEFAULT_COMMAND="fd . 'fbcode/' 'configerator/' 'kernel/' "
 "command! MyShit call fzf#run(fzf#wrap({'source': 'fd-order '.expand('%'), 'sink': 'e'}))
 command! FilesOrdered call fzf#run(fzf#wrap(
@@ -534,12 +546,53 @@ noremap <silent> <Leader>y y:call system('yank3', @0)<Return>
 " altr plugin (for alternate buffers)
 nmap <leader>a <Plug>(altr-forward)
 nmap <leader>s <Plug>(altr-back)
-call altr#define('%.h', '%.c', '%.cpp', '%-inl.h', '%-defs.h', '%.hpp')
+call altr#define('%.h', '%.hh', '%.c', '%.cpp', '%.cc', '%-inl.h', '%-inl.hpp', '%-defs.h', '%.hpp')
+call altr#define('src/%.cpp', 'include/%.h')
 call altr#define('source/%.cconf', 'source/%.cinc', 'source/%.mcconf', 'materialized_configs/%.materialized_JSON')
 colorscheme solarized
+
+if filereadable('/etc/fbwhoami')
+    " Generate URL to view section of code for sharing
+    function! LinkToCode() range
+      let fullpath = resolve(expand('%:p'))
+      let linestr = line('.')
+      if a:lastline - a:firstline > 0
+          let linestr = a:firstline . "-" . a:lastline
+      endif
+
+      let filepos = expand("%:p") . ":" . linestr
+      let urlcmd = "diffusion " . filepos
+      echom system(urlcmd . "|" . "fburl" . " 2> /dev/null")[:-2]
+    endfunction
+
+    nnoremap <leader>d :call LinkToCode()<CR>
+    vnoremap <leader>d :call LinkToCode()<CR>
+endif
 
 set undodir=~/.vim/.undo//
 
 set backupdir=~/.vim/.backup//
 
 set directory=~/.vim/.swp//
+
+let g:ale_linters = {'cpp': ['cppls_fbcode']}
+let g:ale_lint_on_enter = 1
+"autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gD :LspCqueryDerived<CR>
+"autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gc :LspCqueryCallers<CR>
+"autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gb :LspCqueryBase<CR>
+"autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gv :LspCqueryVars<CR>
+autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gd :ALEGoToDefinition<CR>
+"autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gr :LspReferences<CR>
+"autocmd FileType c,cc,cpp,cxx,h,hpp,python nnoremap <silent> gh :LspHover<CR>
+
+lua require("meta")
+
+lua << EOF
+require("meta.lsp")
+local servers = { "rusty@meta", "pyls@meta", "pyre@meta", "thriftlsp@meta", "cppls@meta" }
+for _, lsp in ipairs(servers) do
+  require("lspconfig")[lsp].setup {
+    on_attach = on_attach,
+  }
+end
+EOF
