@@ -3,7 +3,7 @@ if [ -n "$TMUX" ]; then echo in tmux; fi
 
 # Environment
 export EDITOR="nvim"
-export PATH=$HOME/bin:$HOME/bin/third-party:$HOME/bin/mine:$HOME/third-party/bin:$PATH
+export PATH=$HOME/bin:$HOME/bin/third-party:$HOME/bin/mine:$HOME/third-party/bin:$HOME/.bin:$PATH
 
 ###
 

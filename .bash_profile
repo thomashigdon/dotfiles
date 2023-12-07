@@ -34,10 +34,6 @@ shopt -s checkwinsize
 
 unset USERNAME
 
-if [ -f ~/.bashrc-fb ]; then
-	source ~/.bashrc-fb
-fi
-
 set -o vi
 
 if [[ $OSTYPE =~ ^darwin ]]; then
@@ -47,8 +43,8 @@ fi
 
 if [[ $OSTYPE =~ ^darwin ]]; then
   alias airport='sudo /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
-  alias ls='gls --color=auto -N'
-  alias dircolors='gdircolors'
+#  alias ls='gls --color=auto -N'
+#  alias dircolors='gdircolors'
 fi
 
 # Aliases
@@ -85,6 +81,9 @@ fi
 
 if [ -f $HOME/.bashrc-fb ]; then
     source $HOME/.bashrc-fb
+fi
+if [ -f $HOME/.bashrc-custom ]; then
+    source $HOME/.bashrc-custom
 fi
 
 set -o vi
@@ -148,6 +147,10 @@ function goto_dir()
   pushd "$ROOTDIR/$WHERETO"
 }
 
+function update_title {
+	ls
+}
+
 # Update tmux window titles when command is executed
 case ${TERM} in
 
@@ -195,7 +198,7 @@ export HISTFILE=~/.bash_eternal_history
 # Force prompt to write history after every command.
 # http://superuser.com/questions/20900/bash-history-loss
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
-export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
+export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'} history -a; history -c; history -r"
 
 powerline-daemon -q
 
@@ -235,3 +238,33 @@ function h2d {
 [[ -s "$HOME/.local/share/marker/marker.sh" ]] && source "$HOME/.local/share/marker/marker.sh"
 
 export PATH="$HOME/.cargo/bin:$PATH"
+
+# added by setup_fb4a.sh
+export ANDROID_SDK=/opt/android_sdk
+export ANDROID_NDK_REPOSITORY=/opt/android_ndk
+export ANDROID_HOME=${ANDROID_SDK}
+export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/tools/bin:${ANDROID_SDK}/platform-tools
+
+# added by setup_fb4a.sh
+export ANDROID_SDK=/opt/android_sdk
+export ANDROID_NDK_REPOSITORY=/opt/android_ndk
+export ANDROID_HOME=${ANDROID_SDK}
+export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/tools/bin:${ANDROID_SDK}/platform-tools
+
+# added by setup_fb4a.sh
+export ANDROID_SDK=/opt/android_sdk
+export ANDROID_NDK_REPOSITORY=/opt/android_ndk
+export ANDROID_HOME=${ANDROID_SDK}
+export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/tools/bin:${ANDROID_SDK}/platform-tools
+
+# added by setup_fb4a.sh
+export ANDROID_SDK=/opt/android_sdk
+export ANDROID_NDK_REPOSITORY=/opt/android_ndk
+export ANDROID_HOME=${ANDROID_SDK}
+export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/tools/bin:${ANDROID_SDK}/platform-tools
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/tph/prj/gcloud/google-cloud-sdk/path.bash.inc' ]; then . '/Users/tph/prj/gcloud/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/tph/prj/gcloud/google-cloud-sdk/completion.bash.inc' ]; then . '/Users/tph/prj/gcloud/google-cloud-sdk/completion.bash.inc'; fi

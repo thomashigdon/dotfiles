@@ -14,7 +14,7 @@ import hashlib
 import time
 
 CONFIGURED_DIRS = [
-        "fbsource/fbcode",
+#        "fbsource/fbcode",
         "fbsource/xplat",
 #        "configerator",
 #        "linux",
